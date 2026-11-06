@@ -31,7 +31,7 @@ Each row represents a sampled case or control. The sample contains 96 matched se
 \code{case} identifies cases and controls, and \code{set} identifies the matched sets. Case follow-up times in \code{time} are jittered to break ties.
 }
 \examples{
-data(actg320ncc, package = "hoslemSurv")
+data(actg320ncc, package = "asaData")
 length(unique(actg320ncc$id))
 table(table(actg320ncc$set))
 }

@@ -1,7 +1,7 @@
 ^data-raw$
 ^\.github$
 ^\.gitattributes$
-^hoslemSurv\.Rproj$
+^asaData\.Rproj$
 ^\.Rproj\.user$
 ^.*\.Rcheck$
 ^.*\.tar\.gz$

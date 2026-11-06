@@ -1,28 +1,28 @@
-# hoslemSurv <img src="man/figures/logo.png" align="right" width="160" alt="hoslemSurv hex sticker" />
+# asaData <img src="man/figures/logo.png" align="right" width="160" alt="asaData hex sticker" />
 
-[![R package checks](https://github.com/graemeleehickey/hoslemSurv/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/graemeleehickey/hoslemSurv/actions/workflows/R-CMD-check.yaml)
+[![R package checks](https://github.com/graemeleehickey/asaData/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/graemeleehickey/asaData/actions/workflows/R-CMD-check.yaml)
 [![R version](https://img.shields.io/badge/R-%3E%3D%203.5.0-276DC3)](https://www.r-project.org/)
 [![Datasets](https://img.shields.io/badge/datasets-16-006D77)](#datasets)
 [![Licence: GPL-3](https://img.shields.io/badge/licence-GPL--3-444444)](LICENSE.md)
 
 **Author: Graeme L. Hickey**
 
-`hoslemSurv` is an unofficial companion package to the first and second editions of *Applied Survival Analysis: Regression Modeling of Time to Event Data* by Hosmer and Lemeshow (1999), and Hosmer, Lemeshow, and May (2008). It contains 16 datasets from the two editions. Each dataset has a help page describing its variables, coding, units, and book edition. The package has no analysis functions or runtime package dependencies.
+`asaData` is an unofficial companion package to the first and second editions of *Applied Survival Analysis: Regression Modeling of Time to Event Data* by Hosmer and Lemeshow (1999), and Hosmer, Lemeshow, and May (2008). It contains 16 datasets from the two editions. Each dataset has a help page describing its variables, coding, units, and book edition. The package has no analysis functions or runtime package dependencies.
 
 ## Installation
 
 ```r
 install.packages("remotes") # If needed
-remotes::install_github("graemeleehickey/hoslemSurv")
+remotes::install_github("graemeleehickey/asaData")
 ```
 
 ## Use
 
 ```r
-library(hoslemSurv)
-data(package = "hoslemSurv")
-data("whas500", package = "hoslemSurv")
-help("whas500", package = "hoslemSurv")
+library(asaData)
+data(package = "asaData")
+data("whas500", package = "asaData")
+help("whas500", package = "asaData")
 head(whas500)
 
 # Optional analysis using the separately installed survival package
@@ -62,8 +62,8 @@ Each row represents an observation. The recurrent-event data contain multiple in
 All 18 original data files and their codebooks are included with the installed package. Locate them using:
 
 ```r
-system.file("extdata", package = "hoslemSurv")
-system.file("extdata", "edition2", "whas500.dat", package = "hoslemSurv")
+system.file("extdata", package = "asaData")
+system.file("extdata", "edition2", "whas500.dat", package = "asaData")
 ```
 
 The [Wiley companion data site](https://ftp.wiley.com/public/sci_tech_med/survival/) is the original download location. The [UCLA companion page](https://stats.oarc.ucla.edu/other/examples/asa2/) provides SAS and SPSS downloads for selected second-edition datasets, with analysis examples for Stata, SPSS, and SAS.
@@ -72,11 +72,11 @@ The original files are stored under `inst/extdata/` in this repository. See [dat
 
 ## Citation
 
-Use `citation("hoslemSurv")` for the package and book references. Cite the relevant book edition and original study when using a dataset in research.
+Use `citation("asaData")` for the package and book references. Cite the relevant book edition and original study when using a dataset in research.
 
 1. Hosmer, D. W., Jr. and Lemeshow, S. (1999). *Applied Survival Analysis: Regression Modeling of Time to Event Data*. First edition. Wiley. ISBN 978-0-471-15410-5.
 2. Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). *Applied Survival Analysis: Regression Modeling of Time to Event Data*. Second edition. Wiley. DOI: [10.1002/9780470258019](https://doi.org/10.1002/9780470258019).
 
 ## Licence
 
-`hoslemSurv` is distributed under the [GNU General Public License, version 3 (GPL-3)](LICENSE.md). Third-party datasets and codebooks retain their existing rights. Their redistribution terms remain to be clarified before CRAN submission.
+`asaData` is distributed under the [GNU General Public License, version 3 (GPL-3)](LICENSE.md). Third-party datasets and codebooks retain their existing rights. Their redistribution terms remain to be clarified before CRAN submission.

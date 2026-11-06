@@ -28,7 +28,7 @@ The 453-record competing-risks exercise dataset from Chapter 9.
 Each row represents a subject. \code{time} records follow-up in days. \code{ev_typ} distinguishes cardiovascular disease (1), other causes (2), and censoring (0).
 }
 \examples{
-data(comprisk, package = "hoslemSurv")
+data(comprisk, package = "asaData")
 table(comprisk$ev_typ)
 }
 \references{

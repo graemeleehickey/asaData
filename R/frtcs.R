@@ -29,7 +29,7 @@
 #' @references
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @examples
-#' data(frtcs, package = "hoslemSurv")
+#' data(frtcs, package = "asaData")
 #' with(frtcs, summary(as.numeric(date_event - date0)))
 #' @keywords datasets
 "frtcs"

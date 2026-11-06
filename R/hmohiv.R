@@ -19,7 +19,7 @@
 #' @references
 #' Hosmer, D. W., Jr. and Lemeshow, S. (1999). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. First edition. Wiley. ISBN 978-0-471-15410-5.
 #' @examples
-#' data(hmohiv, package = "hoslemSurv")
+#' data(hmohiv, package = "asaData")
 #' with(hmohiv, table(drug, censor))
 #' with(hmohiv, head(as.numeric(enddate - entdate)))
 #' @keywords datasets

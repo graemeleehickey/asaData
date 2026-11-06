@@ -38,7 +38,7 @@ Each row represents a patient. \code{lenfol} and \code{fstat} record mortality f
 The cohort and variable coding differ from \code{whas100} and \code{whas500}. In particular, \code{mitype} has three categories here and two in \code{whas500}.
 }
 \examples{
-data(whas, package = "hoslemSurv")
+data(whas, package = "asaData")
 str(whas)
 head(whas)
 }

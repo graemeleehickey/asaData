@@ -18,7 +18,7 @@
 #' @references
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @examples
-#' data(bpd, package = "hoslemSurv")
+#' data(bpd, package = "asaData")
 #' str(bpd)
 #' head(bpd)
 #' @keywords datasets

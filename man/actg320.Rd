@@ -42,7 +42,7 @@ Each row represents a trial participant. The composite AIDS/death endpoint is re
 \code{strat2} records the screening CD4 stratum, and \code{cd4} records the baseline CD4 measurement.
 }
 \examples{
-data(actg320, package = "hoslemSurv")
+data(actg320, package = "asaData")
 str(actg320)
 head(actg320)
 }

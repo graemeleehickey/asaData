@@ -1,4 +1,4 @@
-Package: hoslemSurv
+Package: asaData
 Type: Package
 Title: Datasets from Hosmer and Colleagues' 'Applied Survival Analysis'
 Version: 0.1.0
@@ -14,7 +14,7 @@ Encoding: UTF-8
 Depends: R (>= 3.5.0)
 LazyData: true
 LazyDataCompression: xz
-URL: https://github.com/graemeleehickey/hoslemSurv
-BugReports: https://github.com/graemeleehickey/hoslemSurv/issues
+URL: https://github.com/graemeleehickey/asaData
+BugReports: https://github.com/graemeleehickey/asaData/issues
 Roxygen: list(markdown = FALSE)
 RoxygenNote: 7.3.3

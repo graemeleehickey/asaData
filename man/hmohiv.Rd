@@ -29,7 +29,7 @@ Follow-up of 100 hypothetical HIV-positive members of a health maintenance organ
 Each row represents a subject. \code{time} records survival or censoring time in approximate months, and \code{censor == 1} indicates death due to AIDS or AIDS-related factors. Calendar follow-up in days can be calculated as \code{as.numeric(enddate - entdate)}.
 }
 \examples{
-data(hmohiv, package = "hoslemSurv")
+data(hmohiv, package = "asaData")
 with(hmohiv, table(drug, censor))
 with(hmohiv, head(as.numeric(enddate - entdate)))
 }

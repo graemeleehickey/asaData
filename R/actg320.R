@@ -33,7 +33,7 @@
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @seealso \code{\link{actg320ncc}}
 #' @examples
-#' data(actg320, package = "hoslemSurv")
+#' data(actg320, package = "asaData")
 #' str(actg320)
 #' head(actg320)
 #' @keywords datasets

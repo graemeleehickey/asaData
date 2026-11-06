@@ -31,7 +31,7 @@ Each row represents a risk interval for one subject. There are 1,296 intervals f
 The first- and second-edition files contain identical values and variable names. \code{recur} represents both editions using the second-edition file. The second-edition codebook specifies that \code{censor = 1} denotes an episode at \code{time1}.
 }
 \examples{
-data(recur, package = "hoslemSurv")
+data(recur, package = "asaData")
 length(unique(recur$id))
 head(recur[order(recur$id, recur$time0), ])
 }

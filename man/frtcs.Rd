@@ -39,7 +39,7 @@ Repeated blood-pressure measurements and follow-up for 697 participants in the F
 Each row represents a participant, with repeated blood-pressure measurements in separate columns. Calendar follow-up in days can be calculated as \code{as.numeric(date_event - date0)}.
 }
 \examples{
-data(frtcs, package = "hoslemSurv")
+data(frtcs, package = "asaData")
 with(frtcs, summary(as.numeric(date_event - date0)))
 }
 \references{

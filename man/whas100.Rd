@@ -33,7 +33,7 @@ The 100-patient Worcester Heart Attack Study dataset described in Table 1.1.
 Each row represents a patient. \code{lenfol} records mortality follow-up, with \code{fstat == 1} indicating death.
 }
 \examples{
-data(whas100, package = "hoslemSurv")
+data(whas100, package = "asaData")
 str(whas100)
 head(whas100)
 }

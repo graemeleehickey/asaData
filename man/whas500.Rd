@@ -48,7 +48,7 @@ Each row represents a patient. \code{lenfol} and \code{fstat} record mortality f
 The coding of \code{mitype} and \code{year} differs from that in \code{whas}.
 }
 \examples{
-data(whas500, package = "hoslemSurv")
+data(whas500, package = "asaData")
 str(whas500)
 head(whas500)
 }

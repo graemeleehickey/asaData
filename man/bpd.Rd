@@ -28,7 +28,7 @@ Oxygen-use follow-up for 78 subjects in the BPD dataset used in Chapter 2.
 Each row represents a subject. \code{ondays} records time on oxygen, and \code{censor == 1} indicates discontinuation of oxygen.
 }
 \examples{
-data(bpd, package = "hoslemSurv")
+data(bpd, package = "asaData")
 str(bpd)
 head(bpd)
 }

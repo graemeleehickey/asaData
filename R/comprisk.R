@@ -19,7 +19,7 @@
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @seealso \code{\link{cvdrisk}}
 #' @examples
-#' data(comprisk, package = "hoslemSurv")
+#' data(comprisk, package = "asaData")
 #' table(comprisk$ev_typ)
 #' @keywords datasets
 "comprisk"

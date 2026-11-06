@@ -30,7 +30,7 @@
 #' @references
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @examples
-#' data(gbcs, package = "hoslemSurv")
+#' data(gbcs, package = "asaData")
 #' with(gbcs, table(menopause, hormone))
 #' with(gbcs, all(as.numeric(recdate - diagdate) == rectime))
 #' @keywords datasets

@@ -1,5 +1,5 @@
 # Checks on the installed data, including edition differences and outcome interpretation.
-library(hoslemSurv)
+library(asaData)
 expected <- list(
   hmohiv = c(100, 7), recur = c(1296, 7), uis = c(628, 12),
   whas = c(481, 14), whasncc_e1 = c(1494, 12),
@@ -11,7 +11,7 @@ expected <- list(
 )
 e <- new.env()
 for (nm in names(expected)) {
-  data(list = nm, package = "hoslemSurv", envir = e)
+  data(list = nm, package = "asaData", envir = e)
   x <- e[[nm]]
   stopifnot(is.data.frame(x), all(dim(x) == expected[[nm]]),
             identical(names(x), tolower(names(x))),
@@ -21,7 +21,7 @@ for (nm in names(expected)) {
     stopifnot(all(x[[v]] %in% 0:1))
   }
 }
-stopifnot(setequal(data(package = "hoslemSurv")$results[, "Item"], names(expected)))
+stopifnot(setequal(data(package = "asaData")$results[, "Item"], names(expected)))
 
 with(e$hmohiv, {
   stopifnot(inherits(entdate, "Date"), inherits(enddate, "Date"),
@@ -94,7 +94,7 @@ with(e$grace1000, {
             all(days[different] == 0.5), all(revascdays[different] == 0))
 })
 # Verify that all original data files and codebooks are installed intact.
-source_dir <- system.file("extdata", package = "hoslemSurv", mustWork = TRUE)
+source_dir <- system.file("extdata", package = "asaData", mustWork = TRUE)
 manifest <- read.csv(file.path(source_dir, "manifest.csv"), stringsAsFactors = FALSE)
 stopifnot(nrow(manifest) == 18L, file.exists(file.path(source_dir, "schema.csv")))
 for (i in seq_len(nrow(manifest))) {

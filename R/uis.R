@@ -32,7 +32,7 @@
 #'
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @examples
-#' data(uis, package = "hoslemSurv")
+#' data(uis, package = "asaData")
 #' sum(complete.cases(uis))
 #' colSums(is.na(uis))
 #' @keywords datasets

@@ -7,7 +7,7 @@
 #'
 #' Variable names are lower case, category codes are numeric, calendar dates are \code{Date} objects, and missing-value dots are represented by \code{NA}. Source row order and numeric values are preserved.
 #' @section Original files:
-#' Original data files and codebooks from both editions are included in the installed package's \file{extdata} directory. Use \code{system.file("extdata", package = "hoslemSurv")} to locate them.
+#' Original data files and codebooks from both editions are included in the installed package's \file{extdata} directory. Use \code{system.file("extdata", package = "asaData")} to locate them.
 #' @source
 #' \href{https://ftp.wiley.com/public/sci_tech_med/survival/}{Wiley companion data site}.
 #'
@@ -17,9 +17,9 @@
 #' @author Graeme L. Hickey
 #' @seealso \code{\link{hmohiv}}, \code{\link{whas500}}, \code{\link{gbcs}}
 #' @examples
-#' data(package = "hoslemSurv")
-#' data("whas500", package = "hoslemSurv")
+#' data(package = "asaData")
+#' data("whas500", package = "asaData")
 #' head(whas500)
-#' system.file("extdata", "edition2", "whas500.dat", package = "hoslemSurv")
+#' system.file("extdata", "edition2", "whas500.dat", package = "asaData")
 #' @keywords package datasets
 "_PACKAGE"

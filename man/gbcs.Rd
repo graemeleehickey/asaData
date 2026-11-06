@@ -40,7 +40,7 @@ Recurrence and mortality follow-up for 686 women in the German Breast Cancer Stu
 Each row represents a woman. The recurrence endpoint is recorded in \code{rectime} and \code{censrec}; the mortality endpoint is recorded in \code{survtime} and \code{censdead}.
 }
 \examples{
-data(gbcs, package = "hoslemSurv")
+data(gbcs, package = "asaData")
 with(gbcs, table(menopause, hormone))
 with(gbcs, all(as.numeric(recdate - diagdate) == rectime))
 }

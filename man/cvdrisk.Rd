@@ -28,7 +28,7 @@ The 65-record CVD risk competing-risks example from Section 9.6.
 Each row represents a subject. \code{time} records follow-up in days. \code{ev_typ} distinguishes cardiovascular disease (1), other causes (2), and censoring (0).
 }
 \examples{
-data(cvdrisk, package = "hoslemSurv")
+data(cvdrisk, package = "asaData")
 table(cvdrisk$ev_typ)
 }
 \references{

@@ -40,7 +40,7 @@ The two editions contain identical values in the same row and column order. \cod
 The first-edition codebook defines \code{censor = 1} as return to drug use or loss to follow-up. The second-edition codebook describes the same indicator as return to drug use. For \code{race = 1}, the first edition uses the label non-White, and the second uses other.
 }
 \examples{
-data(uis, package = "hoslemSurv")
+data(uis, package = "asaData")
 sum(complete.cases(uis))
 colSums(is.na(uis))
 }

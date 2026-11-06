@@ -35,7 +35,7 @@ Each row represents a patient. \code{days} records mortality follow-up, with \co
 For patients with \code{revasc == 1}, \code{revascdays} gives the time from admission to revascularisation.
 }
 \examples{
-data(grace1000, package = "hoslemSurv")
+data(grace1000, package = "asaData")
 str(grace1000)
 head(grace1000)
 }

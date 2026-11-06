@@ -38,7 +38,7 @@ Each row represents a sampled case or control within a risk set. There are 249 m
 The editions contain different sampled records and variables. The first edition has 1,494 rows in 249 matched sets and 12 variables; the second has 1,638 rows in 273 sets and 11 variables. The second edition includes \code{bmi} but omits \code{yrgrp} and \code{lenstay}.
 }
 \examples{
-data(whasncc_e1, package = "hoslemSurv")
+data(whasncc_e1, package = "asaData")
 table(table(whasncc_e1$set))
 with(whasncc_e1, table(case, fstat))
 }

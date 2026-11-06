@@ -24,7 +24,7 @@
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @seealso \code{\link{whas}}, \code{\link{whas500}}
 #' @examples
-#' data(whas100, package = "hoslemSurv")
+#' data(whas100, package = "asaData")
 #' str(whas100)
 #' head(whas100)
 #' @keywords datasets
