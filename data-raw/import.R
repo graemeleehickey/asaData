@@ -4,6 +4,9 @@ local({
   stopifnot(file.exists("DESCRIPTION"), dir.exists("data-raw"))
   manifest <- read.csv("data-raw/manifest.csv", stringsAsFactors = FALSE)
   schema <- read.csv("data-raw/schema.csv", stringsAsFactors = FALSE)
+  selected <- manifest$dataset[manifest$import]
+  stopifnot(!anyNA(manifest$import), !anyDuplicated(selected),
+            setequal(selected, manifest$dataset))
   old_locale <- Sys.getlocale("LC_TIME")
   on.exit(Sys.setlocale("LC_TIME", old_locale), add = TRUE)
   if (is.na(Sys.setlocale("LC_TIME", "C"))) stop("Cannot select English month names.")
@@ -17,6 +20,7 @@ local({
     if (!identical(unname(tools::md5sum(files)), expected_md5)) {
       stop("Source checksum differs from the pinned version: ", m$dataset)
     }
+    if (!m$import) next
     raw <- read.table(files[1L], header = FALSE, colClasses = "character",
                       na.strings = ".", quote = "", comment.char = "",
                       col.names = s$variable, check.names = FALSE)

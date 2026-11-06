@@ -1,12 +1,12 @@
 # Checks on the installed data, including edition differences and outcome interpretation.
 library(hoslemSurv)
 expected <- list(
-  hmohiv_e1 = c(100, 7), recur_e1 = c(1296, 7), uis_e1 = c(628, 12),
+  hmohiv_e1 = c(100, 7), recur = c(1296, 7), uis = c(628, 12),
   whas_e1 = c(481, 14), whasncc_e1 = c(1494, 12),
   actg320_e2 = c(1151, 16), actg320ncc_e2 = c(576, 7), bpd_e2 = c(78, 4),
   comprisk_e2 = c(453, 6), cvdrisk_e2 = c(65, 6), frtcs_e2 = c(697, 17),
-  gbcs_e2 = c(686, 16), grace1000_e2 = c(1000, 9), recur_e2 = c(1296, 7),
-  uis_e2 = c(628, 12), whas100_e2 = c(100, 9), whas500_e2 = c(500, 22),
+  gbcs_e2 = c(686, 16), grace1000_e2 = c(1000, 9),
+  whas100_e2 = c(100, 9), whas500_e2 = c(500, 22),
   whasncc_e2 = c(1638, 11)
 )
 e <- new.env()
@@ -28,14 +28,11 @@ with(e$hmohiv_e1, {
             all(round(as.numeric(enddate - entdate) / (365.25 / 12)) == time),
             sum(censor) == 80L)
 })
-stopifnot(identical(e$recur_e1, e$recur_e2),
-          identical(names(e$uis_e1)[3L], "becktota"),
-          identical(names(e$uis_e2)[3L], "beck"),
-          identical(unname(e$uis_e1), unname(e$uis_e2)),
-          sum(complete.cases(e$uis_e1)) == 575L)
+stopifnot(identical(names(e$uis)[3L], "beck"),
+          sum(complete.cases(e$uis)) == 575L)
 
-for (nm in c("recur_e1", "recur_e2")) {
-  x <- e[[nm]][order(e[[nm]]$id, e[[nm]]$time0), ]
+local({
+  x <- e$recur[order(e$recur$id, e$recur$time0), ]
   stopifnot(length(unique(x$id)) == 400L, all(x$time1 > x$time0), all(x$event %in% 1:4))
   groups <- split(x, x$id)
   stopifnot(all(vapply(groups, function(z) {
@@ -43,7 +40,7 @@ for (nm in c("recur_e1", "recur_e2")) {
     z$time0[1L] == 0 && all(z$event == seq_len(n)) &&
       (n == 1L || all(z$time0[-1L] == z$time1[-n]))
   }, logical(1))))
-}
+})
 for (nm in c("whasncc_e1", "whasncc_e2", "actg320ncc_e2")) {
   x <- e[[nm]]
   stopifnot(all(table(x$set) == 6L), all(tapply(x$case, x$set, sum) == 1L))
@@ -96,4 +93,4 @@ with(e$grace1000_e2, {
   stopifnot(identical(id[different], c(206L, 363L, 401L, 485L, 670L, 976L)),
             all(days[different] == 0.5), all(revascdays[different] == 0))
 })
-cat("All 18 installed datasets passed integrity checks.\n")
+cat("All 16 installed datasets passed integrity checks.\n")

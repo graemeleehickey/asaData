@@ -6,9 +6,9 @@ Authors@R: person(c("Graeme", "L."), "Hickey", email = "graemeleehickey@gmail.co
 Description: Datasets from the first and second editions of 'Applied Survival
     Analysis: Regression Modeling of Time to Event Data' by Hosmer and
     Lemeshow (1999, ISBN:9780471154105), and Hosmer, Lemeshow, and May
-    (2008) <doi:10.1002/9780470258019>. Includes all 18 dataset versions
-    in the source collection, with edition-specific names, original numeric
-    coding, parsed dates, and documentation of variables and source discrepancies.
+    (2008) <doi:10.1002/9780470258019>. Includes 16 datasets covering
+    all 18 source files, with shared datasets represented once, original numeric
+    coding, parsed dates, and documentation of variables and edition differences.
 License: file LICENSE
 Encoding: UTF-8
 Depends: R (>= 3.5.0)

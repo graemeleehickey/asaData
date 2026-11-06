@@ -3,7 +3,12 @@
 local({
   manifest <- read.csv("data-raw/manifest.csv", stringsAsFactors = FALSE)
   schema <- read.csv("data-raw/schema.csv", stringsAsFactors = FALSE)
-  stopifnot(nrow(manifest) == 18L, !anyDuplicated(manifest$dataset))
+  datasets <- unique(manifest$dataset)
+  selected <- manifest$dataset[manifest$import]
+  stopifnot(nrow(manifest) == 18L, length(datasets) == 16L,
+            !anyNA(manifest$import), !anyDuplicated(selected),
+            setequal(selected, datasets), setequal(schema$dataset, datasets),
+            setequal(list.files("data", pattern = "\\.rda$"), paste0(datasets, ".rda")))
   old_locale <- Sys.getlocale("LC_TIME")
   on.exit(Sys.setlocale("LC_TIME", old_locale), add = TRUE)
   Sys.setlocale("LC_TIME", "C")
@@ -42,6 +47,7 @@ local({
     stopifnot(identical(documented, names(x)))
     all_cells <- all_cells + nrow(x) * ncol(x)
   }
-  message("Verified ", nrow(manifest), " datasets, ", all_cells,
-          " source values, and all ", nrow(schema), " variable definitions.")
+  message("Verified ", length(datasets), " packaged datasets against ", nrow(manifest),
+          " source files, ", all_cells, " source values, and all ", nrow(schema),
+          " variable definitions.")
 })

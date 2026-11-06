@@ -2,7 +2,7 @@
 
 **Author: Graeme L. Hickey**
 
-`hoslemSurv` contains the datasets supplied with both editions of *Applied Survival Analysis: Regression Modeling of Time to Event Data*: Hosmer and Lemeshow (1999), and Hosmer, Lemeshow, and May (2008). It is an unofficial data-only companion package, with 18 documented dataset versions and no analysis functions or runtime package dependencies.
+`hoslemSurv` contains the datasets supplied with both editions of *Applied Survival Analysis: Regression Modeling of Time to Event Data*: Hosmer and Lemeshow (1999), and Hosmer, Lemeshow, and May (2008). It is an unofficial data-only companion package, with 16 documented datasets covering all 18 source data files and no analysis functions or runtime package dependencies.
 
 ## Installation
 
@@ -25,15 +25,13 @@ survival::survfit(survival::Surv(lenfol, fstat) ~ gender,
                   data = whas500_e2)
 ```
 
-Each name ends in `_e1` or `_e2` to identify the edition. Variable names are lower case, numeric category codes remain numeric, dates are R `Date` objects, and source missing-value dots become `NA`. Every source row and numeric value is retained. The help page for each dataset describes its observation unit, variables, units, codes, endpoints, missing values, and known source discrepancies.
+The shared datasets `recur` and `uis` represent both editions, using second-edition variable names. Other names end in `_e1` or `_e2` to identify the edition. Variable names are lower case, numeric category codes remain numeric, dates are R `Date` objects, and source missing-value dots become `NA`. Every source row and numeric value is retained. The help page for each dataset describes its observation unit, variables, units, codes, endpoints, missing values, and known source discrepancies.
 
 ## Datasets
 
 | Dataset | Edition | Rows | Variables | Description |
 |---|---:|---:|---:|---|
 | `hmohiv_e1` | 1 | 100 | 7 | Hypothetical HMO-HIV Study |
-| `recur_e1` | 1 | 1,296 | 7 | Recurrent Soreness Episodes |
-| `uis_e1` | 1 | 628 | 12 | UMass Impact Study of Drug Treatment |
 | `whas_e1` | 1 | 481 | 14 | Worcester Heart Attack Study |
 | `whasncc_e1` | 1 | 1,494 | 12 | WHAS Nested Case-Control Sample |
 | `actg320_e2` | 2 | 1,151 | 16 | ACTG 320 Trial |
@@ -44,8 +42,8 @@ Each name ends in `_e1` or `_e2` to identify the edition. Variable names are low
 | `frtcs_e2` | 2 | 697 | 17 | French Three Cities Study |
 | `gbcs_e2` | 2 | 686 | 16 | German Breast Cancer Study |
 | `grace1000_e2` | 2 | 1,000 | 9 | GRACE Acute Coronary Syndrome Data |
-| `recur_e2` | 2 | 1,296 | 7 | Recurrent Soreness Episodes |
-| `uis_e2` | 2 | 628 | 12 | UMass Impact Study of Drug Treatment |
+| `recur` | 1 and 2 | 1,296 | 7 | Recurrent Soreness Episodes |
+| `uis` | 1 and 2 | 628 | 12 | UMass Impact Study of Drug Treatment |
 | `whas100_e2` | 2 | 100 | 9 | WHAS 100-Patient Dataset |
 | `whas500_e2` | 2 | 500 | 22 | WHAS 500-Patient Dataset |
 | `whasncc_e2` | 2 | 1,638 | 11 | WHAS Nested Case-Control Sample |
@@ -54,7 +52,7 @@ Rows are observations, not necessarily distinct participants. The recurrent-even
 
 ## Source conventions and discrepancies
 
-- The two `recur` versions have identical data. The two `uis` versions also have identical values, but the depression-score variable is named `becktota` in edition 1 and `beck` in edition 2. They are kept separately to preserve explicit edition provenance.
+- The two editions share one `recur` dataset and one `uis` dataset because their values are identical. `uis` uses the second-edition name `beck` for the column called `becktota` in edition 1. Both source editions and their documentation are preserved in `data-raw/`, and edition differences are described in the help pages.
 - The two `whasncc` versions contain different sampled records and variables: 1,494 rows and 12 variables in edition 1, versus 1,638 rows and 11 variables in edition 2. Edition 2 includes `bmi` but omits `yrgrp` and `lenstay`.
 - `hmohiv_e1$time` is in approximate months, despite the source codebook saying days. All 100 values agree with rounded calendar follow-up in months.
 - `gbcs_e2$menopause` and `hormone` use `1/2`, despite the source codebook saying `0/1`. All 686 records were matched to `TH.data::GBSG2` to verify the labels. Code 1 means premenopausal/no hormone therapy; code 2 means postmenopausal/hormone therapy.
