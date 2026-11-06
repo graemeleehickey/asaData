@@ -5,8 +5,6 @@
 [![Datasets](https://img.shields.io/badge/datasets-16-006D77)](#datasets)
 [![Licence: GPL-3](https://img.shields.io/badge/licence-GPL--3-444444)](https://www.r-project.org/Licenses/GPL-3)
 
-**Author: Graeme L. Hickey**
-
 `asaData` is an unofficial companion package to the first and second editions of *Applied Survival Analysis: Regression Modeling of Time to Event Data* by Hosmer and Lemeshow (1999), and Hosmer, Lemeshow, and May (2008). It contains 16 datasets from the two editions. Each dataset has a help page describing its variables, coding, units, and book edition. The package has no analysis functions or runtime package dependencies.
 
 ## Installation
