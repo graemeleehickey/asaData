@@ -1,0 +1,20 @@
+citHeader("Cite the package and the book edition relevant to the dataset used.")
+
+bibentry(bibtype = "Manual",
+  title = "hoslemSurv: Datasets from Hosmer and Colleagues' Applied Survival Analysis",
+  author = person(c("Graeme", "L."), "Hickey"),
+  year = "2026",
+  note = "R package version 0.1.0",
+  url = "https://github.com/graemeleehickey/hoslemSurv")
+
+bibentry(bibtype = "Book",
+  title = "Applied Survival Analysis: Regression Modeling of Time to Event Data",
+  author = c(person(c("David", "W."), "Hosmer"), person("Stanley", "Lemeshow")),
+  year = "1999", edition = "First", publisher = "Wiley", address = "New York",
+  isbn = "9780471154105")
+
+bibentry(bibtype = "Book",
+  title = "Applied Survival Analysis: Regression Modeling of Time to Event Data",
+  author = c(person(c("David", "W."), "Hosmer"), person("Stanley", "Lemeshow"), person("Susanne", "May")),
+  year = "2008", edition = "Second", publisher = "Wiley", address = "Hoboken, NJ",
+  doi = "10.1002/9780470258019", isbn = "9780471754992")

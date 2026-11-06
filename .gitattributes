@@ -1,0 +1,4 @@
+* text=auto
+data/*.rda binary
+data-raw/edition1/* -text
+data-raw/edition2/* -text

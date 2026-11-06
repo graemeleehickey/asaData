@@ -1,0 +1,7 @@
+^data-raw$
+^\.github$
+^\.gitattributes$
+^hoslemSurv\.Rproj$
+^\.Rproj\.user$
+^.*\.Rcheck$
+^.*\.tar\.gz$

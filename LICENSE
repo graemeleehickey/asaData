@@ -1,0 +1,38 @@
+LICENSING SCOPE
+
+The original package code and documentation written by Graeme L. Hickey
+are licensed under the MIT licence below.
+
+The third-party datasets in data/, the original data files and codebooks
+under data-raw/edition1/ and data-raw/edition2/, and their underlying content
+are excluded from that grant. They are sourced from:
+https://github.com/graemeleehickey/hosmer-lemeshow
+commit 59a56c509c81898d3853763afcf71686234a1326.
+
+That source repository identifies the Wiley companion FTP site as the
+original source, but supplies no explicit licence for those materials.
+Their existing rights remain with their respective owners. This package
+does not assert ownership of, or grant additional rights to, those materials.
+The absence of an explicit licence is not a grant of permission.
+
+MIT LICENCE FOR ORIGINAL PACKAGE CODE AND DOCUMENTATION
+
+Copyright (c) 2026 Graeme L. Hickey
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.

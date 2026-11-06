@@ -1,0 +1,46 @@
+#' French Three Cities Study (Second Edition)
+#'
+#' Repeated blood-pressure measurements and follow-up for 697 participants in the FRTCS dataset used in Exercise 6 of Chapter 7.
+#'
+#' @format A data frame with 697 rows and 17 variables:
+#' \describe{
+#'   \item{id}{Integer. Participant identifier, 1 to 697.}
+#'   \item{age}{Integer. Age at enrolment, in years.}
+#'   \item{sex}{Integer. Recorded sex: 1 = male; 2 = female.}
+#'   \item{date0}{Date. Baseline examination date, stored as an R Date.}
+#'   \item{sbp0}{Numeric. Baseline systolic blood pressure, in mmHg.}
+#'   \item{dbp0}{Numeric. Baseline diastolic blood pressure, in mmHg.}
+#'   \item{antihyp0}{Integer. Antihypertensive drug-use indicator at visit 0: 0 = no; 1 = yes. The visit-0 interpretation follows the column suffix; the codebook inconsistently labels this as first follow-up.}
+#'   \item{date1}{Date. Date of the first follow-up examination, stored as an R Date. The codebook repeats the label baseline; the visit sequence and corresponding measurements indicate first follow-up.}
+#'   \item{sbp1}{Numeric. Systolic blood pressure at first follow-up, in mmHg.}
+#'   \item{dbp1}{Numeric. Diastolic blood pressure at first follow-up, in mmHg.}
+#'   \item{antihyp1}{Integer. Antihypertensive drug use at first follow-up: 0 = no; 1 = yes.}
+#'   \item{date2}{Date. Date of the second follow-up examination, stored as an R Date.}
+#'   \item{sbp2}{Numeric. Systolic blood pressure at second follow-up, in mmHg. Missing values: 3.}
+#'   \item{dbp2}{Numeric. Diastolic blood pressure at second follow-up, in mmHg. Missing values: 3.}
+#'   \item{antihyp2}{Integer. Antihypertensive drug use at second follow-up: 0 = no; 1 = yes.}
+#'   \item{date_event}{Date. Date of the event or end of follow-up, stored as an R Date.}
+#'   \item{censor}{Integer. Outcome indicator: 1 = event; 0 = censored. The clinical definition of the event is not supplied in the accompanying codebook.}
+#' }
+#' @details
+#' One row represents one participant, with repeated measurements in separate columns. The source heading spells the study name "French Tree Cities Study"; this documentation uses "Three Cities".
+#'
+#' The interpretations of date1 and antihyp0 above are based on the visit-index convention and adjacent variable descriptions. They are documented interpretations of inconsistent labels, not changes to the supplied values. The endpoint definition should be checked in the book before substantive analysis.
+#'
+#' Calendar follow-up can be obtained from date_event - date0. When constructing time-varying covariates, use actual visit dates and restrict measurements to the relevant risk interval; do not assume all recorded visits precede the event.
+#'
+#' Variable names are lower case. Numeric category codes and source row order are preserved; categories are not converted to factors. A dot (.) in a source numeric field is imported as NA. Dates are converted to R Date objects. No rows are removed, no missing values are imputed, and no supplied numeric values are corrected.
+#'
+#' @source
+#' Data file: \href{https://github.com/graemeleehickey/hosmer-lemeshow/blob/59a56c509c81898d3853763afcf71686234a1326/edition2/FRTCS.dat}{edition2/FRTCS.dat}.
+#'
+#' Variable descriptions: \href{https://github.com/graemeleehickey/hosmer-lemeshow/blob/59a56c509c81898d3853763afcf71686234a1326/edition2/FRTCS\%20.txt}{edition2/FRTCS .txt}.
+#'
+#' Repository commit: \code{59a56c509c81898d3853763afcf71686234a1326}. The repository identifies the Wiley companion FTP site as the original source.
+#' @references
+#' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
+#' @examples
+#' data(frtcs_e2, package = "hoslemSurv")
+#' with(frtcs_e2, summary(as.numeric(date_event - date0)))
+#' @keywords datasets
+"frtcs_e2"
