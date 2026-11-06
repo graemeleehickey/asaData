@@ -23,6 +23,8 @@
 #'
 #' This version contains 1,638 sampled records and differs from the first-edition data. nr is supplied for the 273 case rows only, ranges from 81 to 645, and is missing in all 1,365 control rows. The values describe the original risk sets; the supplied codebook does not establish a row-level link to whas500_e2.
 #'
+#' The two editions contain different sampled records and variables. The first edition has 1,494 rows in 249 matched sets and 12 variables; the second has 1,638 rows in 273 sets and 11 variables. The second edition includes bmi but omits yrgrp and lenstay. Both have one case and five controls per set.
+#'
 #' Variable names are lower case. Numeric category codes and source row order are preserved; categories are not converted to factors. A dot (.) in a source numeric field is imported as NA. Dates are converted to R Date objects. No rows are removed, no missing values are imputed, and no supplied numeric values are corrected.
 #'
 #' @source
@@ -30,7 +32,9 @@
 #'
 #' Variable descriptions: \href{https://github.com/graemeleehickey/hosmer-lemeshow/blob/59a56c509c81898d3853763afcf71686234a1326/edition2/whasncc.txt}{edition2/whasncc.txt}.
 #'
-#' Repository commit: \code{59a56c509c81898d3853763afcf71686234a1326}. The repository identifies the Wiley companion FTP site as the original source.
+#' Repository commit: \code{59a56c509c81898d3853763afcf71686234a1326}. The repository identifies the \href{https://ftp.wiley.com/public/sci_tech_med/survival/}{Wiley companion data site} as the original download location.
+#'
+#' For the second edition, the \href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page} provides freely downloadable data in SAS and SPSS formats, with analysis examples for Stata, SPSS, and SAS.
 #' @references
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @seealso \code{\link{whasncc_e1}}

@@ -55,6 +55,7 @@ Rows are observations, not necessarily distinct participants. The recurrent-even
 ## Source conventions and discrepancies
 
 - The two `recur` versions have identical data. The two `uis` versions also have identical values, but the depression-score variable is named `becktota` in edition 1 and `beck` in edition 2. They are kept separately to preserve explicit edition provenance.
+- The two `whasncc` versions contain different sampled records and variables: 1,494 rows and 12 variables in edition 1, versus 1,638 rows and 11 variables in edition 2. Edition 2 includes `bmi` but omits `yrgrp` and `lenstay`.
 - `hmohiv_e1$time` is in approximate months, despite the source codebook saying days. All 100 values agree with rounded calendar follow-up in months.
 - `gbcs_e2$menopause` and `hormone` use `1/2`, despite the source codebook saying `0/1`. All 686 records were matched to `TH.data::GBSG2` to verify the labels. Code 1 means premenopausal/no hormone therapy; code 2 means postmenopausal/hormone therapy.
 - The UIS codebooks give different descriptions of loss to follow-up despite identical event indicators. The FRTCS visit labels are inconsistent, and some endpoint definitions and measurement units are incomplete. Dataset help pages distinguish documented definitions, verified corrections, and unresolved interpretations.
@@ -62,7 +63,9 @@ Rows are observations, not necessarily distinct participants. The recurrent-even
 
 ## Provenance and reproduction
 
-The original `.dat` files and variable descriptions are retained under `data-raw/edition1/` and `data-raw/edition2/`. They are copied byte for byte from [graemeleehickey/hosmer-lemeshow](https://github.com/graemeleehickey/hosmer-lemeshow/tree/59a56c509c81898d3853763afcf71686234a1326), commit `59a56c509c81898d3853763afcf71686234a1326`. The source repository identifies the Wiley companion FTP site as the original source. No other package supplies the data distributed here.
+The original `.dat` files and variable descriptions are retained under `data-raw/edition1/` and `data-raw/edition2/`. They are copied byte for byte from [graemeleehickey/hosmer-lemeshow](https://github.com/graemeleehickey/hosmer-lemeshow/tree/59a56c509c81898d3853763afcf71686234a1326), commit `59a56c509c81898d3853763afcf71686234a1326`. The source repository identifies the [Wiley companion data site](https://ftp.wiley.com/public/sci_tech_med/survival/) as the original download location. No other package supplies the data distributed here.
+
+The [UCLA second-edition companion page](https://stats.oarc.ucla.edu/other/examples/asa2/) provides freely downloadable data in SAS and SPSS formats, with analysis examples for Stata, SPSS, and SAS. These provide additional resources for reproducing the book's analyses.
 
 From the repository root:
 
@@ -90,4 +93,4 @@ The first-edition source codebooks cite 1998; the published edition is cited her
 
 ## Licence
 
-Original package code and documentation by Graeme L. Hickey are licensed under the MIT licence. The third-party datasets and original codebooks retain their existing rights; the source repository provides no explicit dataset licence. This package does not assign a new licence to those materials. Redistribution terms remain to be clarified before a CRAN submission. See [LICENSE](LICENSE).
+Original package code and documentation by Graeme L. Hickey are dedicated under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/), to the extent of his rights in those contributions. CC0 permits reuse without an attribution condition, including commercial reuse. The third-party datasets and original codebooks retain their existing rights; the source repository provides no explicit dataset licence. This package does not assign a new licence to those materials, and their availability for download does not establish redistribution terms. Redistribution terms remain to be clarified before a CRAN submission. See [LICENSE](LICENSE).

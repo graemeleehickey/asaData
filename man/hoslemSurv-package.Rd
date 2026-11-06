@@ -13,8 +13,25 @@ The package contains 18 dataset versions. Names ending in \code{_e1} refer to th
 
 Names are lower case, category codes are retained as numeric values, calendar dates are R Date objects, and missing-value dots are represented by NA. No records are excluded or imputed. The supplied source files and an R import script are retained in the package's GitHub repository.
 
-Some source codebooks contain inconsistent labels or incomplete definitions. These are addressed explicitly in the relevant help pages. Original data values are preserved. The original datasets have no explicit licence in the source repository; see the package LICENSE file for the distinction between third-party data rights and the MIT licence for original package code and documentation.
+Some source codebooks contain inconsistent labels or incomplete definitions. These are addressed explicitly in the relevant help pages. Original data values are preserved.
 }
+\section{Edition comparisons}{
+
+The recur datasets have identical values and variable names. The uis datasets have identical values, but the depression-score variable is named becktota in the first edition and beck in the second; the source codebooks also describe the event indicator differently. The whasncc datasets differ in records and variables: 1,494 rows and 12 variables in the first edition, and 1,638 rows and 11 variables in the second. The WHAS cohort files also differ: whas_e1 has 481 patients, whereas the second edition supplies whas100_e2 and whas500_e2.
+}
+
+\section{Download sources and analysis examples}{
+
+The source repository identifies the \href{https://ftp.wiley.com/public/sci_tech_med/survival/}{Wiley companion data site} as the original download location for the book's data files.
+
+The \href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA second-edition companion page} provides freely downloadable data in SAS and SPSS formats, with analysis examples for Stata, SPSS, and SAS. The data in this package were imported from the original files preserved in the source repository, as identified on each dataset's help page.
+}
+
+\section{Licensing}{
+
+Original package code and documentation by Graeme L. Hickey are dedicated under CC0 1.0 Universal, to the extent of his rights in those contributions. Third-party datasets, original codebooks, and their underlying content are excluded from that dedication. Their availability for download does not establish redistribution terms. No explicit dataset licence is supplied in the source repository; see the package LICENSE file.
+}
+
 \examples{
 data(package = "hoslemSurv")
 data("whas500_e2", package = "hoslemSurv")

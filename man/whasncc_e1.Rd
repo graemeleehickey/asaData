@@ -26,7 +26,9 @@ Data file: \href{https://github.com/graemeleehickey/hosmer-lemeshow/blob/59a56c5
 
 Variable descriptions: \href{https://github.com/graemeleehickey/hosmer-lemeshow/blob/59a56c509c81898d3853763afcf71686234a1326/edition1/whasncc.txt}{edition1/whasncc.txt}.
 
-Repository commit: \code{59a56c509c81898d3853763afcf71686234a1326}. The repository identifies the Wiley companion FTP site as the original source.
+Repository commit: \code{59a56c509c81898d3853763afcf71686234a1326}. The repository identifies the \href{https://ftp.wiley.com/public/sci_tech_med/survival/}{Wiley companion data site} as the original download location.
+
+For the second edition, the \href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page} provides freely downloadable data in SAS and SPSS formats, with analysis examples for Stata, SPSS, and SAS.
 }
 \usage{
 whasncc_e1
@@ -42,6 +44,8 @@ Use case as the response and set as the matching stratum in a nested case-contro
 This version was constructed from the first-edition WHAS cohort. nr is missing in 858 rows; the 636 nonmissing values range from 48 to 481. Nonmissing nr values also occur in some control rows.
 
 Among the 636 records with fstat = 1, lenfol - t ranges from 0 to 0.01 days; 18 records have t equal to lenfol at the supplied precision. This differs from the codebook's stated Uniform(0, 1) adjustment. Values are retained without adding further jitter.
+
+The two editions contain different sampled records and variables. The first edition has 1,494 rows in 249 matched sets and 12 variables; the second has 1,638 rows in 273 sets and 11 variables. The second edition includes bmi but omits yrgrp and lenstay. Both have one case and five controls per set.
 
 Variable names are lower case. Numeric category codes and source row order are preserved; categories are not converted to factors. A dot (.) in a source numeric field is imported as NA. Dates are converted to R Date objects. No rows are removed, no missing values are imputed, and no supplied numeric values are corrected.
 }
