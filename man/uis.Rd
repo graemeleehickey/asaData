@@ -22,15 +22,9 @@ A data frame with 628 rows and 12 variables:
 }
 }
 \source{
-Data file: \href{https://github.com/graemeleehickey/hosmer-lemeshow/blob/59a56c509c81898d3853763afcf71686234a1326/edition2/uis.dat}{edition2/uis.dat}.
+\href{https://ftp.wiley.com/public/sci_tech_med/survival/}{Wiley companion data site}.
 
-Variable descriptions: \href{https://github.com/graemeleehickey/hosmer-lemeshow/blob/59a56c509c81898d3853763afcf71686234a1326/edition2/uis.txt}{edition2/uis.txt}.
-
-First-edition comparison: \href{https://github.com/graemeleehickey/hosmer-lemeshow/blob/59a56c509c81898d3853763afcf71686234a1326/edition1/uis.dat}{data file} and \href{https://github.com/graemeleehickey/hosmer-lemeshow/blob/59a56c509c81898d3853763afcf71686234a1326/edition1/uis.txt}{variable descriptions}.
-
-Repository commit: \code{59a56c509c81898d3853763afcf71686234a1326}. The repository identifies the \href{https://ftp.wiley.com/public/sci_tech_med/survival/}{Wiley companion data site} as the original download location.
-
-For the second edition, the \href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page} provides freely downloadable data in SAS and SPSS formats, with analysis examples for Stata, SPSS, and SAS.
+\href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page}: SAS and SPSS downloads and analysis examples for Stata, SPSS, and SAS.
 }
 \usage{
 uis
@@ -39,15 +33,11 @@ uis
 Drug-treatment follow-up data for 628 participants in the UMass Impact Study (UIS), described in Table 1.3.
 }
 \details{
-One row represents one participant. All 628 records are retained, including 53 with at least one missing value. There are 575 complete records.
+Each row represents a participant. There are 628 records, of which 575 have complete data.
 
-The two editions contain identical data values in the same row and column order. A single dataset, \code{uis}, represents both editions and is imported from the second-edition file using its variable names. The depression-score column is named becktota in the first edition and beck in the second; the packaged column is beck.
+The two editions contain identical values in the same row and column order. \code{uis} represents both editions using second-edition variable names. The depression-score column is \code{becktota} in the first edition and \code{beck} in the second; this dataset uses \code{beck}.
 
-The first-edition codebook explicitly includes loss to follow-up as an event, whereas the second-edition codebook describes the same indicator as return to drug use. No indicator distinguishing these components is provided. The identical values are retained and the difference in endpoint descriptions is reported rather than resolved by recoding.
-
-The race category coded 1 is described as non-White in the first-edition codebook and other in the second. The numeric coding is unchanged.
-
-Variable names are lower case. Numeric category codes and source row order are preserved; categories are not converted to factors. A dot (.) in a source numeric field is imported as NA. Dates are converted to R Date objects. No rows are removed, no missing values are imputed, and no supplied numeric values are corrected.
+The first-edition codebook defines \code{censor = 1} as return to drug use or loss to follow-up. The second-edition codebook describes the same indicator as return to drug use. For \code{race = 1}, the first edition uses the label non-White, and the second uses other.
 }
 \examples{
 data(uis, package = "hoslemSurv")
@@ -55,7 +45,7 @@ sum(complete.cases(uis))
 colSums(is.na(uis))
 }
 \references{
-Hosmer, D. W., Jr. and Lemeshow, S. (1999). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. First edition. Wiley. ISBN 978-0-471-15410-5. The first-edition source codebook cites 1998.
+Hosmer, D. W., Jr. and Lemeshow, S. (1999). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. First edition. Wiley. ISBN 978-0-471-15410-5.
 
 Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 }

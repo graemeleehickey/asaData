@@ -1,0 +1,26 @@
+#' Hypothetical HMO-HIV Study (First Edition)
+#'
+#' Follow-up of 100 hypothetical HIV-positive members of a health maintenance organisation, used in Table 1.1 of the first edition.
+#'
+#' @format A data frame with 100 rows and 7 variables:
+#' \describe{
+#'   \item{id}{Integer. Subject identifier, 1 to 100.}
+#'   \item{entdate}{Date. Study entry date, stored as an R Date.}
+#'   \item{enddate}{Date. End-of-follow-up date, stored as an R Date. For an observed death this is the event date; otherwise it is the censoring date.}
+#'   \item{time}{Integer. Survival or censoring time in approximate months.}
+#'   \item{age}{Integer. Age in years.}
+#'   \item{drug}{Integer. History of intravenous drug use: 0 = no; 1 = yes.}
+#'   \item{censor}{Integer. Follow-up outcome: 1 = death due to AIDS or AIDS-related factors; 0 = alive at study end or lost to follow-up.}
+#' }
+#' @details
+#' Each row represents a subject. \code{time} records survival or censoring time in approximate months, and \code{censor == 1} indicates death due to AIDS or AIDS-related factors. Calendar follow-up in days can be calculated as \code{as.numeric(enddate - entdate)}.
+#' @source
+#' \href{https://ftp.wiley.com/public/sci_tech_med/survival/}{Wiley companion data site}.
+#' @references
+#' Hosmer, D. W., Jr. and Lemeshow, S. (1999). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. First edition. Wiley. ISBN 978-0-471-15410-5.
+#' @examples
+#' data(hmohiv, package = "hoslemSurv")
+#' with(hmohiv, table(drug, censor))
+#' with(hmohiv, head(as.numeric(enddate - entdate)))
+#' @keywords datasets
+"hmohiv"

@@ -1,0 +1,36 @@
+#' Worcester Heart Attack Study (First Edition)
+#'
+#' The 481-record Worcester Heart Attack Study (WHAS) dataset described in Table 1.4 of the first edition.
+#'
+#' @format A data frame with 481 rows and 14 variables:
+#' \describe{
+#'   \item{id}{Integer. Patient identifier, 1 to 481.}
+#'   \item{age}{Integer. Age recorded in the chart, in years.}
+#'   \item{sex}{Integer. Recorded sex: 0 = male; 1 = female.}
+#'   \item{cpk}{Integer. Peak cardiac enzyme measurement, in international units as stated in the source codebook.}
+#'   \item{sho}{Integer. Cardiogenic shock complication: 0 = no; 1 = yes.}
+#'   \item{chf}{Integer. Left heart failure complication: 0 = no; 1 = yes.}
+#'   \item{miord}{Integer. Myocardial infarction order: 0 = first; 1 = recurrent.}
+#'   \item{mitype}{Integer. Myocardial infarction type: 1 = Q-wave; 2 = non-Q-wave; 3 = indeterminate.}
+#'   \item{year}{Integer. Cohort-year code: 1 = 1975; 2 = 1978; 3 = 1981; 4 = 1984; 5 = 1986; 6 = 1988.}
+#'   \item{yrgrp}{Integer. Grouped cohort-year code: 1 = 1975 and 1978; 2 = 1981 and 1984; 3 = 1986 and 1988.}
+#'   \item{lenstay}{Integer. Length of hospital stay, in days.}
+#'   \item{dstat}{Integer. Status at hospital discharge: 0 = alive; 1 = dead.}
+#'   \item{lenfol}{Integer. Total follow-up from hospital admission to death or last follow-up, in days.}
+#'   \item{fstat}{Integer. Vital status at last follow-up: 0 = alive; 1 = dead.}
+#' }
+#' @details
+#' Each row represents a patient. \code{lenfol} and \code{fstat} record mortality follow-up; \code{lenstay} and \code{dstat} record the hospital-discharge endpoint.
+#'
+#' The cohort and variable coding differ from \code{whas100} and \code{whas500}. In particular, \code{mitype} has three categories here and two in \code{whas500}.
+#' @source
+#' \href{https://ftp.wiley.com/public/sci_tech_med/survival/}{Wiley companion data site}.
+#' @references
+#' Hosmer, D. W., Jr. and Lemeshow, S. (1999). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. First edition. Wiley. ISBN 978-0-471-15410-5.
+#' @seealso \code{\link{whas100}}, \code{\link{whas500}}, \code{\link{whasncc_e1}}
+#' @examples
+#' data(whas, package = "hoslemSurv")
+#' str(whas)
+#' head(whas)
+#' @keywords datasets
+"whas"

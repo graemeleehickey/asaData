@@ -2,8 +2,8 @@
 # Run from the package repository root: source("data-raw/import.R").
 local({
   stopifnot(file.exists("DESCRIPTION"), dir.exists("data-raw"))
-  manifest <- read.csv("data-raw/manifest.csv", stringsAsFactors = FALSE)
-  schema <- read.csv("data-raw/schema.csv", stringsAsFactors = FALSE)
+  manifest <- read.csv("inst/extdata/manifest.csv", stringsAsFactors = FALSE)
+  schema <- read.csv("inst/extdata/schema.csv", stringsAsFactors = FALSE)
   selected <- manifest$dataset[manifest$import]
   stopifnot(!anyNA(manifest$import), !anyDuplicated(selected),
             setequal(selected, manifest$dataset))
@@ -15,7 +15,7 @@ local({
   for (i in seq_len(nrow(manifest))) {
     m <- manifest[i, ]
     s <- schema[schema$dataset == m$dataset, ]
-    files <- file.path("data-raw", c(m$data_file, m$codebook))
+    files <- file.path("inst", "extdata", c(m$data_file, m$codebook))
     expected_md5 <- c(m$data_md5, m$codebook_md5)
     if (!identical(unname(tools::md5sum(files)), expected_md5)) {
       stop("Source checksum differs from the pinned version: ", m$dataset)

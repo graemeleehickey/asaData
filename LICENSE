@@ -2,21 +2,19 @@ LICENSING SCOPE
 
 Original contributions
 
-Graeme L. Hickey dedicates his original package code and documentation under CC0 1.0 Universal, to the extent of his copyright and related rights in those contributions. No attribution condition is imposed by that dedication, and reuse, modification, and redistribution are permitted, including for commercial purposes.
+Graeme L. Hickey dedicates his original package code, documentation, and artwork under CC0 1.0 Universal, to the extent of his copyright and related rights in those contributions. No attribution condition is imposed by that dedication, and reuse, modification, and redistribution are permitted, including for commercial purposes.
 
 The CC0 1.0 Universal legal terms apply:
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 
 Third-party materials
 
-The third-party datasets in data/, the original data files and codebooks under data-raw/edition1/ and data-raw/edition2/, and their underlying content are excluded from the CC0 dedication. They are sourced from:
-https://github.com/graemeleehickey/hosmer-lemeshow
-commit 59a56c509c81898d3853763afcf71686234a1326.
+The third-party datasets in data/, the original data files and codebooks under inst/extdata/edition1/ and inst/extdata/edition2/, and their underlying content are excluded from the CC0 dedication.
 
-The source repository identifies the Wiley companion data site as the original download location:
+The original book materials are available from the Wiley companion data site:
 https://ftp.wiley.com/public/sci_tech_med/survival/
 
-UCLA provides freely downloadable second-edition data in SAS and SPSS formats, with analysis examples for Stata, SPSS, and SAS:
+UCLA provides freely downloadable selected second-edition data in SAS and SPSS formats, with analysis examples for Stata, SPSS, and SAS:
 https://stats.oarc.ucla.edu/other/examples/asa2/
 
-No explicit dataset licence is supplied in the source repository. Availability for download does not itself establish redistribution terms. Existing third-party rights remain with their respective holders; this package neither grants those rights nor imposes additional restrictions on those materials. Nothing in this notice restricts uses that do not require permission under applicable law.
+No explicit dataset redistribution licence has been identified. Availability for download does not itself establish redistribution terms. Existing third-party rights remain with their respective holders; this package neither grants those rights nor imposes additional restrictions on those materials. Nothing in this notice restricts uses that do not require permission under applicable law.

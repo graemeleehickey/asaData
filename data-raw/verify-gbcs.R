@@ -2,8 +2,8 @@
 local({
   if (!requireNamespace("TH.data", quietly = TRUE)) stop("Install TH.data to run this optional comparison.")
   e <- new.env()
-  load("data/gbcs_e2.rda", envir = e)
-  x <- e$gbcs_e2
+  load("data/gbcs.rda", envir = e)
+  x <- e$gbcs
   utils::data("GBSG2", package = "TH.data", envir = e)
   y <- e$GBSG2
   y$grade <- as.integer(y$tgrade)

@@ -1,8 +1,8 @@
 # Verify every packaged value against the preserved source, independently of import.R.
 # Run from the package repository root: source("data-raw/validate.R").
 local({
-  manifest <- read.csv("data-raw/manifest.csv", stringsAsFactors = FALSE)
-  schema <- read.csv("data-raw/schema.csv", stringsAsFactors = FALSE)
+  manifest <- read.csv("inst/extdata/manifest.csv", stringsAsFactors = FALSE)
+  schema <- read.csv("inst/extdata/schema.csv", stringsAsFactors = FALSE)
   datasets <- unique(manifest$dataset)
   selected <- manifest$dataset[manifest$import]
   stopifnot(nrow(manifest) == 18L, length(datasets) == 16L,
@@ -16,7 +16,7 @@ local({
   for (i in seq_len(nrow(manifest))) {
     m <- manifest[i, ]
     s <- schema[schema$dataset == m$dataset, ]
-    paths <- file.path("data-raw", c(m$data_file, m$codebook))
+    paths <- file.path("inst", "extdata", c(m$data_file, m$codebook))
     stopifnot(identical(unname(tools::md5sum(paths)), c(m$data_md5, m$codebook_md5)))
     tokens <- scan(paths[1L], what = character(), quiet = TRUE)
     stopifnot(length(tokens) == m$rows * m$columns)
