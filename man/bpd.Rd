@@ -31,21 +31,20 @@ Use \code{download_asa("bpd")} to retrieve this dataset. Data are not included i
 \examples{
 \dontrun{
 bpd <- download_asa("bpd")
-if (requireNamespace("survival", quietly = TRUE)) {
-  # Second edition, Figure 2.11 and Table 2.17: time to oxygen discontinuation.
-  bpd_km <- survival::survfit(
-    survival::Surv(ondays, censor == 1) ~ surfact, data = bpd
-  )
-  plot(bpd_km, col = c("#0072B2", "#D55E00"), lty = 1:2,
-       conf.int = FALSE, xlab = "Days on oxygen",
-       ylab = "Probability of remaining on oxygen")
-  legend("topright", c("No surfactant", "Surfactant"),
-         col = c("#0072B2", "#D55E00"), lty = 1:2, bty = "n")
-  bpd_logrank <- survival::survdiff(
-    survival::Surv(ondays, censor == 1) ~ surfact, data = bpd
-  )
-  bpd_logrank
-}
+library(survival)
+# Second edition, Figure 2.11 and Table 2.17: time to oxygen discontinuation.
+bpd_km <- survfit(
+  Surv(ondays, censor == 1) ~ surfact, data = bpd
+)
+plot(bpd_km, col = c("#0072B2", "#D55E00"), lty = 1:2,
+     conf.int = FALSE, xlab = "Days on oxygen",
+     ylab = "Probability of remaining on oxygen")
+legend("topright", c("No surfactant", "Surfactant"),
+       col = c("#0072B2", "#D55E00"), lty = 1:2, bty = "n")
+bpd_logrank <- survdiff(
+  Surv(ondays, censor == 1) ~ surfact, data = bpd
+)
+bpd_logrank
 }
 }
 \references{

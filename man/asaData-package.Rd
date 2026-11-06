@@ -38,7 +38,7 @@ head(whas500)
 \seealso{
 \code{\link{download_asa}}, \code{\link{read_asa}}, \code{\link{asa_datasets}}
 
-\code{vignette("survival-examples", package = "asaData")} for analyses using the optional \pkg{survival} package.
+\code{vignette("survival-examples", package = "asaData")} for analyses using the \pkg{survival} package.
 }
 \author{
 Graeme L. Hickey

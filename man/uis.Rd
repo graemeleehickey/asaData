@@ -43,17 +43,16 @@ Use \code{download_asa("uis")} to retrieve this dataset. Data are not included i
 \examples{
 \dontrun{
 uis <- download_asa("uis")
-if (requireNamespace("survival", quietly = TRUE)) {
-  # Second edition, Table 4.12: common sample for the drug-history models.
-  uis_analysis <- uis[complete.cases(uis[c("age", "ivhx")]), ]
-  uis_analysis$drug <- as.integer(uis_analysis$ivhx \%in\% c(2, 3))
-  uis_cox <- survival::coxph(
-    survival::Surv(time, censor == 1) ~ drug,
-    data = uis_analysis, ties = "breslow"
-  )
-  c(participants = uis_cox$n, events = uis_cox$nevent)
-  summary(uis_cox)
-}
+library(survival)
+# Second edition, Table 4.12: common sample for the drug-history models.
+uis_analysis <- uis[complete.cases(uis[c("age", "ivhx")]), ]
+uis_analysis$drug <- as.integer(uis_analysis$ivhx \%in\% c(2, 3))
+uis_cox <- coxph(
+  Surv(time, censor == 1) ~ drug,
+  data = uis_analysis, ties = "breslow"
+)
+c(participants = uis_cox$n, events = uis_cox$nevent)
+summary(uis_cox)
 }
 }
 \references{

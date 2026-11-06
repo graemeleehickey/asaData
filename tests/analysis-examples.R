@@ -1,6 +1,6 @@
 # Compare the executed help examples with the cited UCLA textbook results.
-if (nzchar(Sys.getenv("ASADATA_TEST_ARCHIVES")) &&
-    requireNamespace("survival", quietly = TRUE)) local({
+if (nzchar(Sys.getenv("ASADATA_TEST_ARCHIVES"))) local({
+  library(survival)
   cache_dir <- file.path(tempdir(), "asaData")
   dir.create(cache_dir, showWarnings = FALSE)
   archives <- file.path(Sys.getenv("ASADATA_TEST_ARCHIVES"),
@@ -60,5 +60,5 @@ if (nzchar(Sys.getenv("ASADATA_TEST_ARCHIVES")) &&
                   results$grace_intervals$tstart) == 109847.5)
   cat("All seven help examples matched the cited published results.\n")
 }) else {
-  message("Analysis checks skipped: supply ASADATA_TEST_ARCHIVES and install survival.")
+  message("Analysis checks skipped: supply ASADATA_TEST_ARCHIVES.")
 }

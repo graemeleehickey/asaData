@@ -36,16 +36,15 @@ Use \code{download_asa("whas100")} to retrieve this dataset. Data are not includ
 \examples{
 \dontrun{
 whas100 <- download_asa("whas100")
-if (requireNamespace("survival", quietly = TRUE)) {
-  # Second edition, Table 2.3 and Figure 2.2: all-cause mortality.
-  whas100_km <- survival::survfit(
-    survival::Surv(lenfol, fstat == 1) ~ 1,
-    data = whas100, conf.type = "log-log"
-  )
-  summary(whas100_km, times = c(6, 14, 44))
-  plot(whas100_km, xscale = 365.25, conf.int = FALSE,
-       xlab = "Years since admission", ylab = "Survival probability")
-}
+library(survival)
+# Second edition, Table 2.3 and Figure 2.2: all-cause mortality.
+whas100_km <- survfit(
+  Surv(lenfol, fstat == 1) ~ 1,
+  data = whas100, conf.type = "log-log"
+)
+summary(whas100_km, times = c(6, 14, 44))
+plot(whas100_km, xscale = 365.25, conf.int = FALSE,
+     xlab = "Years since admission", ylab = "Survival probability")
 }
 }
 \references{

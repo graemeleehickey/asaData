@@ -41,14 +41,13 @@
 #' @examples
 #' \dontrun{
 #' actg320 <- download_asa("actg320")
-#' if (requireNamespace("survival", quietly = TRUE)) {
-#'   # Second edition, Table 3.2: AIDS-defining diagnosis or death.
-#'   actg_cox <- survival::coxph(
-#'     survival::Surv(time, censor == 1) ~ tx + age + sex + cd4 + priorzdv,
-#'     data = actg320, ties = "breslow"
-#'   )
-#'   summary(actg_cox)
-#' }
+#' library(survival)
+#' # Second edition, Table 3.2: AIDS-defining diagnosis or death.
+#' actg_cox <- coxph(
+#'   Surv(time, censor == 1) ~ tx + age + sex + cd4 + priorzdv,
+#'   data = actg320, ties = "breslow"
+#' )
+#' summary(actg_cox)
 #' }
 #' @keywords datasets
 NULL

@@ -38,23 +38,22 @@ Use \code{download_asa("grace1000")} to retrieve this dataset. Data are not incl
 \examples{
 \dontrun{
 grace1000 <- download_asa("grace1000")
-if (requireNamespace("survival", quietly = TRUE)) {
-  # Second edition, Table 7.6: revascularisation changes during follow-up.
-  grace_intervals <- survival::tmerge(
-    grace1000, grace1000, id = id, death_event = event(days, death)
-  )
-  grace_intervals <- survival::tmerge(
-    grace_intervals, grace1000[grace1000$revasc == 1, ],
-    id = id, revasc_t = tdc(revascdays)
-  )
-  grace_cox <- survival::coxph(
-    survival::Surv(tstart, tstop, death_event) ~ revasc_t +
-      I(1000 / age) + sqrt(sysbp) + stchange,
-    data = grace_intervals, ties = "breslow"
-  )
-  c(intervals = nrow(grace_intervals), deaths = grace_cox$nevent)
-  summary(grace_cox)
-}
+library(survival)
+# Second edition, Table 7.6: revascularisation changes during follow-up.
+grace_intervals <- tmerge(
+  grace1000, grace1000, id = id, death_event = event(days, death)
+)
+grace_intervals <- tmerge(
+  grace_intervals, grace1000[grace1000$revasc == 1, ],
+  id = id, revasc_t = tdc(revascdays)
+)
+grace_cox <- coxph(
+  Surv(tstart, tstop, death_event) ~ revasc_t +
+    I(1000 / age) + sqrt(sysbp) + stchange,
+  data = grace_intervals, ties = "breslow"
+)
+c(intervals = nrow(grace_intervals), deaths = grace_cox$nevent)
+summary(grace_cox)
 }
 }
 \references{

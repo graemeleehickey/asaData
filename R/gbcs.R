@@ -38,16 +38,15 @@
 #' @examples
 #' \dontrun{
 #' gbcs <- download_asa("gbcs")
-#' if (requireNamespace("survival", quietly = TRUE)) {
-#'   # Second edition, Table 4.11: recurrence and hormone-by-size interaction.
-#'   # Use a local 0/1 indicator: the source hormone variable is coded 1/2.
-#'   gbcs_analysis <- transform(gbcs, hormone01 = as.integer(hormone == 2))
-#'   gbcs_cox <- survival::coxph(
-#'     survival::Surv(rectime, censrec == 1) ~ hormone01 * size,
-#'     data = gbcs_analysis, ties = "breslow"
-#'   )
-#'   coef(gbcs_cox)
-#' }
+#' library(survival)
+#' # Second edition, Table 4.11: recurrence and hormone-by-size interaction.
+#' # Use a local 0/1 indicator: the source hormone variable is coded 1/2.
+#' gbcs_analysis <- transform(gbcs, hormone01 = as.integer(hormone == 2))
+#' gbcs_cox <- coxph(
+#'   Surv(rectime, censrec == 1) ~ hormone01 * size,
+#'   data = gbcs_analysis, ties = "breslow"
+#' )
+#' coef(gbcs_cox)
 #' }
 #' @keywords datasets
 NULL

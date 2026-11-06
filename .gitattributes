@@ -1,5 +1,2 @@
 * text=auto
-data/*.rda binary
-inst/extdata/edition1/* -text
-inst/extdata/edition2/* -text
 man/figures/*.png binary

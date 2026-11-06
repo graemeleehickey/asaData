@@ -29,7 +29,7 @@ check_reference <- function(label, actual, reference, tolerance = 5e-7) {
 }
 ```
 
-This vignette presents R analyses of seven datasets from the second edition of *Applied Survival Analysis* [@hosmer2008]. The analyses follow selected tables and figures presented in UCLA's Stata examples. The data are downloaded from Wiley with `download_asa()`; the calculations use the optional `survival` package. The package itself contains no dataset records.
+This vignette presents R analyses of seven datasets from the second edition of *Applied Survival Analysis* [@hosmer2008]. The analyses follow selected tables and figures presented in UCLA's Stata examples. The data are downloaded from Wiley with `download_asa()`; the calculations use the `survival` package. The package itself contains no dataset records.
 
 This vignette displays the analysis code without downloading or evaluating it during installation. To run the examples, execute the chunks in an R session; each edition archive is downloaded once and then reused. To render the complete analyses, set `ASADATA_RUN_EXAMPLES=true` before building the vignette.
 

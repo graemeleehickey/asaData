@@ -23,9 +23,9 @@ whas500 <- download_asa("whas500")
 help("whas500", package = "asaData")
 head(whas500)
 
-# Optional analysis using the separately installed survival package
-survival::survfit(survival::Surv(lenfol, fstat) ~ gender,
-                  data = whas500)
+# Survival analysis example
+library(survival)
+survfit(Surv(lenfol, fstat) ~ gender, data = whas500)
 ```
 
 The first request downloads the relevant edition archive over HTTPS. Further requests from that edition reuse the archive. By default, downloads are kept only for the current R session. Each import checks the source checksum, dimensions, missing-value counts, and variable types. Changed or damaged files are rejected.
@@ -52,11 +52,10 @@ The [reference manual](https://github.com/graemeleehickey/asaData/blob/main/asaD
 
 ## Analysis examples
 
-The help pages for `whas100`, `bpd`, `actg320`, `gbcs`, `uis`, `whas500`, and `grace1000` include examples using the optional `survival` package. The [Survival analysis examples vignette](https://github.com/graemeleehickey/asaData/blob/main/vignettes/survival-examples.Rmd) covers interactions, proportional-hazards diagnostics, time-dependent covariates, and parametric models, with comparisons against selected second-edition results presented by UCLA.
+The help pages for `whas100`, `bpd`, `actg320`, `gbcs`, `uis`, `whas500`, and `grace1000` include examples using `survival`, a recommended package included with standard R installations. The [Survival analysis examples vignette](https://github.com/graemeleehickey/asaData/blob/main/vignettes/survival-examples.Rmd) covers interactions, proportional-hazards diagnostics, time-dependent covariates, and parametric models, with comparisons against selected second-edition results presented by UCLA.
 
 ```r
-# Install the optional analysis package if needed
-install.packages("survival")
+library(survival)
 example("actg320", package = "asaData", run.dontrun = TRUE)
 
 # Build the vignette (displays code without downloading or running analyses)

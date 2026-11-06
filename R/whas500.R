@@ -47,15 +47,14 @@
 #' @examples
 #' \dontrun{
 #' whas500 <- download_asa("whas500")
-#' if (requireNamespace("survival", quietly = TRUE)) {
-#'   # Second edition, Table 5.3: all-cause mortality after admission.
-#'   whas500_cox <- survival::coxph(
-#'     survival::Surv(lenfol, fstat == 1) ~ age + hr + sysbp + diasbp + bmi +
-#'       gender + cvd + afb + chf + miord + mitype,
-#'     data = whas500, ties = "breslow"
-#'   )
-#'   summary(whas500_cox)
-#' }
+#' library(survival)
+#' # Second edition, Table 5.3: all-cause mortality after admission.
+#' whas500_cox <- coxph(
+#'   Surv(lenfol, fstat == 1) ~ age + hr + sysbp + diasbp + bmi +
+#'     gender + cvd + afb + chf + miord + mitype,
+#'   data = whas500, ties = "breslow"
+#' )
+#' summary(whas500_cox)
 #' }
 #' @keywords datasets
 NULL

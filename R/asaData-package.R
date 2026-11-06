@@ -17,7 +17,7 @@
 #' @author Graeme L. Hickey
 #' @seealso \code{\link{download_asa}}, \code{\link{read_asa}}, \code{\link{asa_datasets}}
 #'
-#' \code{vignette("survival-examples", package = "asaData")} for analyses using the optional \pkg{survival} package.
+#' \code{vignette("survival-examples", package = "asaData")} for analyses using the \pkg{survival} package.
 #' @examples
 #' asa_datasets()
 #' \dontrun{

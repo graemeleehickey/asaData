@@ -5,3 +5,10 @@
 .DS_Store
 *.Rcheck/
 *.tar.gz
+
+# Keep downloaded records and original codebooks out of version control.
+/data/
+/data-raw/edition*/
+/inst/extdata/edition*/
+*.dat
+*.zip
