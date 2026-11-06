@@ -2,6 +2,9 @@
 #'
 #' Drug-treatment follow-up data for 628 participants in the UMass Impact Study (UIS), described in Table 1.3.
 #'
+#' @name uis
+#' @section Download:
+#' Use \code{download_asa("uis")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 628 rows and 12 variables:
 #' \describe{
 #'   \item{id}{Integer. Participant identifier, 1 to 628.}
@@ -35,7 +38,8 @@
 #' UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-4-interpretation-of-a-fitted-proportional-hazards-regression-model/}{Applied Survival Analysis, second edition: Chapter 4, Stata examples}. Table 4.12.
 #' @seealso \code{vignette("survival-examples", package = "asaData")} for longer analyses.
 #' @examples
-#' data(uis, package = "asaData")
+#' \dontrun{
+#' uis <- download_asa("uis")
 #' if (requireNamespace("survival", quietly = TRUE)) {
 #'   # Second edition, Table 4.12: common sample for the drug-history models.
 #'   uis_analysis <- uis[complete.cases(uis[c("age", "ivhx")]), ]
@@ -47,5 +51,6 @@
 #'   c(participants = uis_cox$n, events = uis_cox$nevent)
 #'   summary(uis_cox)
 #' }
+#' }
 #' @keywords datasets
-"uis"
+NULL

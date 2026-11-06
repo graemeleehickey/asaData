@@ -2,13 +2,16 @@
 #'
 #' The 1,000-record GRACE dataset used in Chapter 7 and described in Table 7.4.
 #'
+#' @name grace1000
+#' @section Download:
+#' Use \code{download_asa("grace1000")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 1,000 rows and 9 variables:
 #' \describe{
 #'   \item{id}{Integer. Patient identifier, 1 to 1000.}
 #'   \item{days}{Numeric. Follow-up to death or censoring, in days, from 0.5 to 180. Same-day deaths or discharges are assigned 0.5 days in the source description.}
 #'   \item{death}{Integer. Death during follow-up: 1 = death; 0 = censored.}
 #'   \item{revasc}{Integer. Revascularisation performed: 1 = yes; 0 = no.}
-#'   \item{revascdays}{Integer. Days from admission to revascularisation when \code{revasc = 1}, or recorded follow-up time when \code{revasc = 0}.}
+#'   \item{revascdays}{Integer. Time from admission, in days: to revascularisation if \code{revasc = 1}, or to recorded follow-up otherwise.}
 #'   \item{los}{Integer. Length of hospital stay, in days.}
 #'   \item{age}{Integer. Age at admission, in years.}
 #'   \item{sysbp}{Integer. Systolic blood pressure on admission, in mmHg.}
@@ -28,7 +31,8 @@
 #' UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-7-extensions-of-the-proportional-hazards-model/}{Applied Survival Analysis, second edition: Chapter 7, Stata examples}. Table 7.6.
 #' @seealso \code{vignette("survival-examples", package = "asaData")} for longer analyses.
 #' @examples
-#' data(grace1000, package = "asaData")
+#' \dontrun{
+#' grace1000 <- download_asa("grace1000")
 #' if (requireNamespace("survival", quietly = TRUE)) {
 #'   # Second edition, Table 7.6: revascularisation changes during follow-up.
 #'   grace_intervals <- survival::tmerge(
@@ -46,5 +50,6 @@
 #'   c(intervals = nrow(grace_intervals), deaths = grace_cox$nevent)
 #'   summary(grace_cox)
 #' }
+#' }
 #' @keywords datasets
-"grace1000"
+NULL

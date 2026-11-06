@@ -2,8 +2,9 @@
 local({
   if (!requireNamespace("TH.data", quietly = TRUE)) stop("Install TH.data to run this optional comparison.")
   e <- new.env()
-  load("data/gbcs.rda", envir = e)
-  x <- e$gbcs
+  cache_dir <- Sys.getenv("ASADATA_TEST_ARCHIVES",
+                          unset = file.path(tempdir(), "asaData"))
+  x <- asaData::download_asa("gbcs", cache_dir = cache_dir)
   utils::data("GBSG2", package = "TH.data", envir = e)
   y <- e$GBSG2
   y$grade <- as.integer(y$tgrade)

@@ -1,14 +1,15 @@
 Package: asaData
 Type: Package
-Title: Datasets from Hosmer and Colleagues' 'Applied Survival Analysis'
-Version: 0.1.0
+Title: Download Datasets from 'Applied Survival Analysis'
+Version: 0.2.0
 Authors@R: person(c("Graeme", "L."), "Hickey", email = "graemeleehickey@gmail.com", role = c("aut", "cre"))
 Description: An unofficial companion package to the first and second editions
     of 'Applied Survival Analysis: Regression Modeling of Time to Event Data'
     by Hosmer and Lemeshow (1999) <ISBN:9780471154105>, and Hosmer, Lemeshow,
-    and May (2008) <doi:10.1002/9780470258019>. Includes 16 datasets covering
-    all 18 source files, with shared datasets represented once, original numeric
-    coding, parsed dates, and documentation of variables and edition differences.
+    and May (2008) <doi:10.1002/9780470258019>. Downloads and imports 16 datasets
+    directly from Wiley companion archives, with source checksums, original
+    numeric coding, parsed dates, and documentation of variables and edition
+    differences. No dataset records or original codebooks are included.
 License: GPL-3
 Encoding: UTF-8
 Language: en-GB
@@ -18,8 +19,6 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-LazyData: true
-LazyDataCompression: xz
 URL: https://github.com/graemeleehickey/asaData
 BugReports: https://github.com/graemeleehickey/asaData/issues
 Roxygen: list(markdown = FALSE)

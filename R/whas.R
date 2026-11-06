@@ -2,6 +2,9 @@
 #'
 #' The 481-record Worcester Heart Attack Study (WHAS) dataset described in Table 1.4 of the first edition.
 #'
+#' @name whas
+#' @section Download:
+#' Use \code{download_asa("whas")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 481 rows and 14 variables:
 #' \describe{
 #'   \item{id}{Integer. Patient identifier, 1 to 481.}
@@ -29,8 +32,10 @@
 #' Hosmer, D. W., Jr. and Lemeshow, S. (1999). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. First edition. Wiley. ISBN 978-0-471-15410-5.
 #' @seealso \code{\link{whas100}}, \code{\link{whas500}}, \code{\link{whasncc_e1}}
 #' @examples
-#' data(whas, package = "asaData")
+#' \dontrun{
+#' whas <- download_asa("whas")
 #' str(whas)
 #' head(whas)
+#' }
 #' @keywords datasets
-"whas"
+NULL

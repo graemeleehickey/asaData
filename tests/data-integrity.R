@@ -1,5 +1,8 @@
-# Checks on the installed data, including edition differences and outcome interpretation.
+# Optional checks using separately downloaded archives; no network requests are needed.
 library(asaData)
+if (nzchar(Sys.getenv("ASADATA_TEST_ARCHIVES"))) local({
+cache_dir <- Sys.getenv("ASADATA_TEST_ARCHIVES")
+stopifnot(all(file.exists(file.path(cache_dir, c("edition1.zip", "edition2.zip")))))
 expected <- list(
   hmohiv = c(100, 7), recur = c(1296, 7), uis = c(628, 12),
   whas = c(481, 14), whasncc_e1 = c(1494, 12),
@@ -11,8 +14,7 @@ expected <- list(
 )
 e <- new.env()
 for (nm in names(expected)) {
-  data(list = nm, package = "asaData", envir = e)
-  x <- e[[nm]]
+  x <- e[[nm]] <- download_asa(nm, cache_dir = cache_dir)
   stopifnot(is.data.frame(x), all(dim(x) == expected[[nm]]),
             identical(names(x), tolower(names(x))),
             !any(vapply(x, is.factor, logical(1))),
@@ -21,7 +23,7 @@ for (nm in names(expected)) {
     stopifnot(all(x[[v]] %in% 0:1))
   }
 }
-stopifnot(setequal(data(package = "asaData")$results[, "Item"], names(expected)))
+stopifnot(setequal(asa_datasets()$dataset, names(expected)))
 
 with(e$hmohiv, {
   stopifnot(inherits(entdate, "Date"), inherits(enddate, "Date"),
@@ -93,14 +95,7 @@ with(e$grace1000, {
   stopifnot(identical(id[different], c(206L, 363L, 401L, 485L, 670L, 976L)),
             all(days[different] == 0.5), all(revascdays[different] == 0))
 })
-# Verify that all original data files and codebooks are installed intact.
-source_dir <- system.file("extdata", package = "asaData", mustWork = TRUE)
-manifest <- read.csv(file.path(source_dir, "manifest.csv"), stringsAsFactors = FALSE)
-stopifnot(nrow(manifest) == 18L, file.exists(file.path(source_dir, "schema.csv")))
-for (i in seq_len(nrow(manifest))) {
-  m <- manifest[i, ]
-  paths <- file.path(source_dir, c(m$data_file, m$codebook))
-  stopifnot(all(file.exists(paths)),
-            identical(unname(tools::md5sum(paths)), c(m$data_md5, m$codebook_md5)))
+cat("All 16 downloaded datasets passed integrity checks.\n")
+}) else {
+  message("Source-data checks skipped: set ASADATA_TEST_ARCHIVES to a local archive directory.")
 }
-cat("All 16 installed datasets and 36 original files passed integrity checks.\n")

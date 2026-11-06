@@ -2,6 +2,9 @@
 #'
 #' Counting-process data from a hypothetical study of recurrent soreness episodes, used in the Chapter 9 exercises.
 #'
+#' @name recur
+#' @section Download:
+#' Use \code{download_asa("recur")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 1,296 rows and 7 variables:
 #' \describe{
 #'   \item{id}{Integer. Subject identifier, 1 to 400; repeated across intervals.}
@@ -23,8 +26,10 @@
 #'
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @examples
-#' data(recur, package = "asaData")
+#' \dontrun{
+#' recur <- download_asa("recur")
 #' length(unique(recur$id))
 #' head(recur[order(recur$id, recur$time0), ])
+#' }
 #' @keywords datasets
-"recur"
+NULL

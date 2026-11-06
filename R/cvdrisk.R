@@ -2,6 +2,9 @@
 #'
 #' The 65-record CVD risk competing-risks example from Section 9.6.
 #'
+#' @name cvdrisk
+#' @section Download:
+#' Use \code{download_asa("cvdrisk")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 65 rows and 6 variables:
 #' \describe{
 #'   \item{id}{Integer. Subject identifier.}
@@ -19,7 +22,9 @@
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @seealso \code{\link{comprisk}}
 #' @examples
-#' data(cvdrisk, package = "asaData")
+#' \dontrun{
+#' cvdrisk <- download_asa("cvdrisk")
 #' table(cvdrisk$ev_typ)
+#' }
 #' @keywords datasets
-"cvdrisk"
+NULL

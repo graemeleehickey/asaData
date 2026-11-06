@@ -2,6 +2,9 @@
 #'
 #' The 100-patient Worcester Heart Attack Study dataset described in Table 1.1.
 #'
+#' @name whas100
+#' @section Download:
+#' Use \code{download_asa("whas100")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 100 rows and 9 variables:
 #' \describe{
 #'   \item{id}{Integer. Patient identifier, 1 to 100.}
@@ -27,7 +30,8 @@
 #' UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-2-descriptive-methods-for-survival-data/}{Applied Survival Analysis, second edition: Chapter 2, Stata examples}. Table 2.3 and Figure 2.2.
 #' @seealso \code{vignette("survival-examples", package = "asaData")} for longer analyses.
 #' @examples
-#' data(whas100, package = "asaData")
+#' \dontrun{
+#' whas100 <- download_asa("whas100")
 #' if (requireNamespace("survival", quietly = TRUE)) {
 #'   # Second edition, Table 2.3 and Figure 2.2: all-cause mortality.
 #'   whas100_km <- survival::survfit(
@@ -38,5 +42,6 @@
 #'   plot(whas100_km, xscale = 365.25, conf.int = FALSE,
 #'        xlab = "Years since admission", ylab = "Survival probability")
 #' }
+#' }
 #' @keywords datasets
-"whas100"
+NULL

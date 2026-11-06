@@ -1,27 +1,28 @@
-#' Datasets from Both Editions of Applied Survival Analysis
+#' Download Datasets from Applied Survival Analysis
 #'
 #' An unofficial companion package to the first and second editions of Applied Survival Analysis: Regression Modeling of Time to Event Data.
 #'
 #' @details
-#' The package contains 16 datasets. Each help page identifies the book edition and describes the variables, category codes, units, and endpoints. The \code{\link{recur}} and \code{\link{uis}} datasets are extracted from the second-edition of the book, but are essentially the same as the first-edition copies. The \code{whasncc} dataset is different between the first and second edition of the book, and therefore both copies are kept.
+#' Use \code{\link{asa_datasets}} to list the 16 supported datasets and \code{\link{download_asa}} to download and import one. Each help page identifies the book edition and describes the variables, category codes, units, and endpoints. The shared \code{\link{recur}} and \code{\link{uis}} datasets use the second-edition source files. The different WHAS nested case-control samples are available as \code{\link{whasncc_e1}} and \code{\link{whasncc_e2}}.
 #'
 #' Variable names are lower case, category codes are numeric, calendar dates are \code{Date} objects, and missing-value dots are represented by \code{NA}. Source row order and numeric values are preserved.
-#' @section Original files:
-#' Original data files and codebooks from both editions are included in the installed package's \file{extdata} directory. Use \code{system.file("extdata", package = "asaData")} to locate them.
+#' @section Source files:
+#' No dataset records or original codebooks are included in the package. Wiley archives are downloaded only when requested and cached for the current R session by default. Use \code{\link{read_asa}} to import an original data file already on your computer. Every import checks the source checksum, dimensions, missing-value counts, and variable types.
 #' @source
 #' \href{https://ftp.wiley.com/public/sci_tech_med/survival/}{Wiley companion data site}.
 #'
-#' \href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page}: SAS and SPSS downloads for selected second-edition datasets, with analysis examples for Stata, SPSS, and SAS.
+#' \href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page}: analysis examples and other download formats for selected second-edition datasets.
 #' @section Licensing:
-#' This package is distributed under the \href{https://www.r-project.org/Licenses/GPL-3}{GNU General Public License, version 3 (GPL-3)}. Third-party datasets and codebooks retain their existing rights.
+#' Package code and original documentation are distributed under the \href{https://www.r-project.org/Licenses/GPL-3}{GNU General Public License, version 3 (GPL-3)}. Downloaded datasets and codebooks retain their existing rights and are subject to the source terms.
 #' @author Graeme L. Hickey
-#' @seealso \code{\link{hmohiv}}, \code{\link{whas500}}, \code{\link{gbcs}}
+#' @seealso \code{\link{download_asa}}, \code{\link{read_asa}}, \code{\link{asa_datasets}}
 #'
 #' \code{vignette("survival-examples", package = "asaData")} for analyses using the optional \pkg{survival} package.
 #' @examples
-#' data(package = "asaData")
-#' data("whas500", package = "asaData")
+#' asa_datasets()
+#' \dontrun{
+#' whas500 <- download_asa("whas500")
 #' head(whas500)
-#' system.file("extdata", "edition2", "whas500.dat", package = "asaData")
+#' }
 #' @keywords package datasets
 "_PACKAGE"

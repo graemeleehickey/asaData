@@ -2,6 +2,9 @@
 #'
 #' Recurrence and mortality follow-up for 686 women in the German Breast Cancer Study (GBCS), described in Table 1.4.
 #'
+#' @name gbcs
+#' @section Download:
+#' Use \code{download_asa("gbcs")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 686 rows and 16 variables:
 #' \describe{
 #'   \item{id}{Integer. Participant identifier, 1 to 686.}
@@ -18,7 +21,7 @@
 #'   \item{estrg_recp}{Integer. Oestrogen receptor measurement.}
 #'   \item{rectime}{Integer. Time from diagnosis to recurrence or censoring, in days; equals \code{recdate - diagdate}.}
 #'   \item{censrec}{Integer. Recurrence indicator: 0 = censored; 1 = recurrence.}
-#'   \item{survtime}{Integer. Time from diagnosis to death or censoring, in days; equals \code{deathdate - diagdate}.}
+#'   \item{survtime}{Integer. Days from diagnosis to death or censoring; equals \code{deathdate - diagdate}.}
 #'   \item{censdead}{Integer. Death indicator: 0 = censored; 1 = death.}
 #' }
 #' @details
@@ -33,10 +36,11 @@
 #' UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-4-interpretation-of-a-fitted-proportional-hazards-regression-model/}{Applied Survival Analysis, second edition: Chapter 4, Stata examples}. Table 4.11.
 #' @seealso \code{vignette("survival-examples", package = "asaData")} for longer analyses.
 #' @examples
-#' data(gbcs, package = "asaData")
+#' \dontrun{
+#' gbcs <- download_asa("gbcs")
 #' if (requireNamespace("survival", quietly = TRUE)) {
 #'   # Second edition, Table 4.11: recurrence and hormone-by-size interaction.
-#'   # Use a local 0/1 indicator: the packaged hormone variable is coded 1/2.
+#'   # Use a local 0/1 indicator: the source hormone variable is coded 1/2.
 #'   gbcs_analysis <- transform(gbcs, hormone01 = as.integer(hormone == 2))
 #'   gbcs_cox <- survival::coxph(
 #'     survival::Surv(rectime, censrec == 1) ~ hormone01 * size,
@@ -44,5 +48,6 @@
 #'   )
 #'   coef(gbcs_cox)
 #' }
+#' }
 #' @keywords datasets
-"gbcs"
+NULL

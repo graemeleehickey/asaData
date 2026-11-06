@@ -1,0 +1,17 @@
+dataset,edition,rows,columns,file,md5,url
+hmohiv,1,100,7,hmohiv.dat,7f893f435e6c36523c1941079663195e,https://ftp.wiley.com/public/sci_tech_med/survival/First-Edition%20Data.zip
+whas,1,481,14,whas.dat,1fe33146056223f73844adfa809b6a6e,https://ftp.wiley.com/public/sci_tech_med/survival/First-Edition%20Data.zip
+whasncc_e1,1,1494,12,whasncc.dat,af630005640ff0dade135b54c2526eed,https://ftp.wiley.com/public/sci_tech_med/survival/First-Edition%20Data.zip
+actg320,2,1151,16,actg320.dat,88c16b5a20cb29dae2495d19945e8358,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip
+actg320ncc,2,576,7,actg320ncc.dat,e1c75d10b93cea9da7e76f718a31b0d5,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip
+bpd,2,78,4,bpd.dat,607c239388a193e4cd4648c099828ba0,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip
+comprisk,2,453,6,comprisk.dat,104a06d75ce60381f0db84240425ccf0,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip
+cvdrisk,2,65,6,cvdrisk.dat,d4da617a79e796b35c4fff113ff4e193,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip
+frtcs,2,697,17,FRTCS.dat,b8d78af11e0741cdce190585ad46751a,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip
+gbcs,2,686,16,gbcs.dat,46a0930be7352a896059f31397cb7cf8,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip
+grace1000,2,1000,9,GRACE1000.dat,ec6204f595a01fd958ffd833b439062e,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip
+recur,2,1296,7,recur.dat,66fc35bb755b5595177aa8e987c825bd,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip
+uis,2,628,12,uis.dat,e61b3f5e2174045ca97e77663bfaf597,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip
+whas100,2,100,9,whas100.dat,30a7588ce32e76a50e404feab6620b29,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip
+whas500,2,500,22,whas500.dat,2b56c042a26ef46e950f427c2199ea15,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip
+whasncc_e2,2,1638,11,whasncc.dat,9419703f2645da3885b3ca2996126039,https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip

@@ -14,7 +14,8 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>",
-                      fig.width = 7, fig.height = 4.5)
+                      fig.width = 7, fig.height = 4.5,
+                      eval = identical(Sys.getenv("ASADATA_RUN_EXAMPLES"), "true"))
 options(width = 85)
 checks <- list()
 check_reference <- function(label, actual, reference, tolerance = 5e-7) {
@@ -28,7 +29,9 @@ check_reference <- function(label, actual, reference, tolerance = 5e-7) {
 }
 ```
 
-This vignette presents R analyses of seven datasets from the second edition of *Applied Survival Analysis* [@hosmer2008]. The analyses follow selected tables and figures presented in UCLA's Stata examples. All data are supplied by `asaData`; the calculations use the optional `survival` package.
+This vignette presents R analyses of seven datasets from the second edition of *Applied Survival Analysis* [@hosmer2008]. The analyses follow selected tables and figures presented in UCLA's Stata examples. The data are downloaded from Wiley with `download_asa()`; the calculations use the optional `survival` package. The package itself contains no dataset records.
+
+This vignette displays the analysis code without downloading or evaluating it during installation. To run the examples, execute the chunks in an R session; each edition archive is downloaded once and then reused. To render the complete analyses, set `ASADATA_RUN_EXAMPLES=true` before building the vignette.
 
 ```{r packages}
 library(asaData)
@@ -42,7 +45,7 @@ Follow-up is measured in days unless the code explicitly converts it to years. E
 The WHAS 100-patient example follows Table 2.3 and Figure 2.2 [@ucla2]. The endpoint is all-cause mortality after hospital admission. UCLA calls the follow-up variables `foltime` and `folstatus`; their names in `asaData` are `lenfol` and `fstat`.
 
 ```{r whas100-km, fig.cap="Kaplan-Meier estimate of survival after admission in the WHAS 100-patient dataset."}
-data(whas100, package = "asaData")
+whas100 <- download_asa("whas100")
 whas100_km <- survfit(Surv(lenfol, fstat == 1) ~ 1,
                      data = whas100, conf.type = "log-log")
 summary(whas100_km, times = c(6, 14, 44))
@@ -57,10 +60,10 @@ check_reference("Table 2.3: survival estimates",
 stopifnot(nrow(whas100) == 100L, sum(whas100$fstat) == 51L)
 ```
 
-For the BPD dataset, the event is discontinuation of oxygen. Survival therefore means remaining on oxygen. The following log-rank test compares the two surfactant groups, as in Table 2.17 [@ucla2]. A corresponding survival plot is included in `example("bpd", package = "asaData")`.
+For the BPD dataset, the event is discontinuation of oxygen. Survival therefore means remaining on oxygen. The following log-rank test compares the two surfactant groups, as in Table 2.17 [@ucla2]. A corresponding survival plot is included in the `bpd` help page.
 
 ```{r bpd-logrank}
-data(bpd, package = "asaData")
+bpd <- download_asa("bpd")
 bpd_logrank <- survdiff(Surv(ondays, censor == 1) ~ surfact, data = bpd)
 bpd_logrank
 ```
@@ -76,7 +79,7 @@ stopifnot(nrow(bpd) == 78L, sum(bpd$censor) == 73L)
 Tables 3.1 and 3.2 compare treatment regimens without and with covariate adjustment [@ucla3]. Both models use all 1,151 participants and the composite endpoint of an AIDS-defining diagnosis or death; there are 96 events. `tx = 1` denotes a regimen containing indinavir. The numeric `sex` coding is retained to reproduce the published coefficient.
 
 ```{r actg-models}
-data(actg320, package = "asaData")
+actg320 <- download_asa("actg320")
 actg_unadjusted <- coxph(Surv(time, censor == 1) ~ tx,
                         data = actg320, ties = "breslow")
 actg_adjusted <- coxph(
@@ -105,10 +108,10 @@ stopifnot(actg_unadjusted$n == 1151L, actg_unadjusted$nevent == 96L,
 
 ## Hormone therapy and tumour size
 
-Table 4.11 uses the recurrence endpoint in the German Breast Cancer Study [@ucla4]. All 686 women are included, with 299 recurrences. The packaged `hormone` variable uses 1 for no therapy and 2 for therapy. A local 0/1 indicator gives the parameterisation used in the UCLA interaction model.
+Table 4.11 uses the recurrence endpoint in the German Breast Cancer Study [@ucla4]. All 686 women are included, with 299 recurrences. The source `hormone` variable uses 1 for no therapy and 2 for therapy. A local 0/1 indicator gives the parameterisation used in the UCLA interaction model.
 
 ```{r gbcs-models}
-data(gbcs, package = "asaData")
+gbcs <- download_asa("gbcs")
 gbcs_analysis <- transform(gbcs, hormone01 = as.integer(hormone == 2))
 gbcs_unadjusted <- coxph(Surv(rectime, censrec == 1) ~ hormone01,
                          data = gbcs_analysis, ties = "breslow")
@@ -149,7 +152,7 @@ stopifnot(gbcs_interaction$n == 686L, gbcs_interaction$nevent == 299L)
 Table 4.12 fits three models to the same 605 participants with observed `age` and `ivhx`, including 489 events [@ucla4]. Applying this restriction before fitting any model keeps the comparisons on a common population. The endpoint follows the second-edition coding of return to drug use; `?uis` describes the edition differences.
 
 ```{r uis-baseline-models}
-data(uis, package = "asaData")
+uis <- download_asa("uis")
 uis_analysis <- uis[complete.cases(uis[c("age", "ivhx")]), ]
 uis_analysis$drug <- as.integer(uis_analysis$ivhx %in% c(2, 3))
 uis_drug <- coxph(Surv(time, censor == 1) ~ drug,
@@ -179,7 +182,7 @@ stopifnot(uis_drug$n == 605L, uis_drug$nevent == 489L,
 Table 5.3 fits the following multivariable Cox model for all-cause mortality [@ucla5]. It uses 500 patients and 215 deaths.
 
 ```{r whas500-model}
-data(whas500, package = "asaData")
+whas500 <- download_asa("whas500")
 whas500_cox <- coxph(
   Surv(lenfol, fstat == 1) ~ age + hr + sysbp + diasbp + bmi +
     gender + cvd + afb + chf + miord + mitype,
@@ -283,7 +286,7 @@ stopifnot(length(unique(uis_intervals$id)) == 628L,
 Tables 7.5 and 7.6 compare two encodings of revascularisation for mortality follow-up in 1,000 patients, with 324 deaths [@ucla7]. The first model uses whether revascularisation occurred at any point during follow-up. The second updates exposure at the recorded procedure time. Both adjust for inverse age, square-root systolic blood pressure, and ST-segment deviation.
 
 ```{r grace-baseline}
-data(grace1000, package = "asaData")
+grace1000 <- download_asa("grace1000")
 grace_baseline <- coxph(
   Surv(days, death == 1) ~ revasc + I(1000 / age) + sqrt(sysbp) + stchange,
   data = grace1000, ties = "breslow"
@@ -370,7 +373,7 @@ stopifnot(nrow(exponential_fit$y) == 100L, nrow(weibull_fit$y) == 100L,
 
 The following selected results are calculated from the models above and compared with the values displayed by UCLA. The vignette also checks every coefficient in the cited fitted models, the event counts, and the numbers and total lengths of the time-dependent intervals. Numerical tolerances allow for rounding in the published output and small numerical differences between software implementations. The proportional-hazards diagnostic statistics are reported separately because the implementations differ.
 
-```{r numerical-comparison, echo=FALSE}
+```{r numerical-comparison}
 comparison <- data.frame(
   Table = c("2.17", "3.1", "4.11", "4.12", "5.3", "7.2", "7.6", "8.5"),
   Quantity = c("BPD log-rank statistic", "ACTG treatment coefficient",
@@ -387,9 +390,9 @@ comparison <- data.frame(
 knitr::kable(comparison, digits = 7, row.names = FALSE)
 ```
 
-The calculations above passed `r length(checks)` numerical comparisons with published results. The versions used for this rendering are:
+`r if (length(checks)) paste("The calculations above passed", length(checks), "numerical comparisons with published results. The versions used for this rendering are:") else "The analyses were not run for this rendering. Executing the chunks performs the numerical comparisons and records the R and package versions:"`
 
-```{r versions, echo=FALSE}
+```{r versions}
 cat(R.version.string, "\n")
 cat("asaData", as.character(packageVersion("asaData")), "\n")
 cat("survival", as.character(packageVersion("survival")), "\n")

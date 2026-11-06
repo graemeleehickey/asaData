@@ -2,6 +2,9 @@
 #'
 #' Follow-up of 100 hypothetical HIV-positive members of a health maintenance organisation, used in Table 1.1 of the first edition.
 #'
+#' @name hmohiv
+#' @section Download:
+#' Use \code{download_asa("hmohiv")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 100 rows and 7 variables:
 #' \describe{
 #'   \item{id}{Integer. Subject identifier, 1 to 100.}
@@ -19,8 +22,10 @@
 #' @references
 #' Hosmer, D. W., Jr. and Lemeshow, S. (1999). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. First edition. Wiley. ISBN 978-0-471-15410-5.
 #' @examples
-#' data(hmohiv, package = "asaData")
+#' \dontrun{
+#' hmohiv <- download_asa("hmohiv")
 #' with(hmohiv, table(drug, censor))
 #' with(hmohiv, head(as.numeric(enddate - entdate)))
+#' }
 #' @keywords datasets
-"hmohiv"
+NULL

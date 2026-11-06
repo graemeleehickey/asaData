@@ -2,6 +2,9 @@
 #'
 #' The 500-patient Worcester Heart Attack Study dataset described in Table 1.2.
 #'
+#' @name whas500
+#' @section Download:
+#' Use \code{download_asa("whas500")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 500 rows and 22 variables:
 #' \describe{
 #'   \item{id}{Integer. Patient identifier, 1 to 500.}
@@ -42,7 +45,8 @@
 #' UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-5-model-development/}{Applied Survival Analysis, second edition: Chapter 5, Stata examples}. Table 5.3.
 #' @seealso \code{vignette("survival-examples", package = "asaData")} for longer analyses.
 #' @examples
-#' data(whas500, package = "asaData")
+#' \dontrun{
+#' whas500 <- download_asa("whas500")
 #' if (requireNamespace("survival", quietly = TRUE)) {
 #'   # Second edition, Table 5.3: all-cause mortality after admission.
 #'   whas500_cox <- survival::coxph(
@@ -52,5 +56,6 @@
 #'   )
 #'   summary(whas500_cox)
 #' }
+#' }
 #' @keywords datasets
-"whas500"
+NULL

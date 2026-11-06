@@ -2,6 +2,9 @@
 #'
 #' Nested case-control data for the ACTG 320 example in Section 9.4, comprising 96 matched sets.
 #'
+#' @name actg320ncc
+#' @section Download:
+#' Use \code{download_asa("actg320ncc")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 576 rows and 7 variables:
 #' \describe{
 #'   \item{set}{Integer. Matched case-control set identifier, 1 to 96.}
@@ -22,8 +25,10 @@
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @seealso \code{\link{actg320}}
 #' @examples
-#' data(actg320ncc, package = "asaData")
+#' \dontrun{
+#' actg320ncc <- download_asa("actg320ncc")
 #' length(unique(actg320ncc$id))
 #' table(table(actg320ncc$set))
+#' }
 #' @keywords datasets
-"actg320ncc"
+NULL

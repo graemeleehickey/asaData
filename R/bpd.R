@@ -2,6 +2,9 @@
 #'
 #' Oxygen-use follow-up for 78 subjects in the BPD dataset used in Chapter 2.
 #'
+#' @name bpd
+#' @section Download:
+#' Use \code{download_asa("bpd")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 78 rows and 4 variables:
 #' \describe{
 #'   \item{id}{Integer. Subject identifier, 1 to 78.}
@@ -21,7 +24,8 @@
 #' UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-2-descriptive-methods-for-survival-data/}{Applied Survival Analysis, second edition: Chapter 2, Stata examples}. Figure 2.11 and Table 2.17.
 #' @seealso \code{vignette("survival-examples", package = "asaData")} for longer analyses.
 #' @examples
-#' data(bpd, package = "asaData")
+#' \dontrun{
+#' bpd <- download_asa("bpd")
 #' if (requireNamespace("survival", quietly = TRUE)) {
 #'   # Second edition, Figure 2.11 and Table 2.17: time to oxygen discontinuation.
 #'   bpd_km <- survival::survfit(
@@ -37,5 +41,6 @@
 #'   )
 #'   bpd_logrank
 #' }
+#' }
 #' @keywords datasets
-"bpd"
+NULL

@@ -1,20 +1,38 @@
-# Recreating the packaged data
+# Validating imports
 
 **Author: Graeme L. Hickey**
 
-The original data files and codebooks are stored in `inst/extdata/edition1/` and `inst/extdata/edition2/` and are included when the package is installed. Their contents are preserved byte for byte. The FRTCS codebook is named `FRTCS.txt`; its original filename contained a space before the extension.
+The package downloads original Wiley ZIP archives when requested. It does not include dataset records or original codebooks. `inst/metadata/manifest.csv` lists the 16 supported datasets, their source editions, archive URLs, filenames, dimensions, and MD5 checksums. `inst/metadata/schema.csv` records the 175 variables, storage types, date formats, and missing-value counts. `recur` and `uis` use the second-edition files; their first-edition values agree.
 
-`inst/extdata/manifest.csv` records all 18 source files, their editions, dataset names, dimensions, checksums, and source version. The `import` column selects one source per packaged dataset; `recur` and `uis` use the second-edition files. `inst/extdata/schema.csv` specifies the 175 variables across the 16 packaged datasets, their storage types, date formats, and expected missing-value counts.
+Routine `R CMD check` runs synthetic-file tests without contacting Wiley. These cover downloads, archive reuse, refresh failures, checksum rejection, malformed input, date conversion, and missing-value handling. Dataset help pages and the vignette display download examples without running them automatically.
 
-Run these commands from the repository root:
+For checks against the original data, install the current package and run the following from the repository root. The first two calls download each Wiley archive once. Keep the archive directory outside the repository.
 
 ```r
-source("data-raw/import.R")
-roxygen2::roxygenise()
+library(asaData)
+archive_dir <- file.path(tempdir(), "asaData-validation")
+invisible(download_asa("hmohiv", cache_dir = archive_dir))
+invisible(download_asa("whas500", cache_dir = archive_dir))
+Sys.setenv(ASADATA_TEST_ARCHIVES = archive_dir)
 source("data-raw/validate.R")
-source("data-raw/verify-gbcs.R") # Optional label comparison; requires TH.data
+source("tests/data-integrity.R")
+source("tests/analysis-examples.R") # Requires survival
+source("data-raw/verify-gbcs.R")    # Optional; requires TH.data
 ```
 
-The import verifies source checksums, preserves row order and numeric values, uses lower-case names, converts source missing-value dots to `NA`, and parses calendar dates. Validation compares every packaged value against the original files from both editions and checks the variable documentation. Installed-package checks also verify the original files through `system.file()`.
+`validate.R` independently compares every imported value with the source tokens and checks every documented variable name. The integrity checks cover edition differences, endpoints, dates, and missing values. The analysis checks compare all seven help examples with the cited UCLA results. The optional GBCS comparison verifies menopausal-status and hormone-therapy labels against `TH.data::GBSG2` by matching records on six baseline variables and comparing recurrence times.
 
-`verify-gbcs.R` verifies the GBCS menopausal-status and hormone-therapy labels against `TH.data::GBSG2`, matching records using six baseline variables and comparing recurrence times. The remaining data checks are in `tests/data-integrity.R`.
+To render and check the complete vignette without downloading the same archives again, copy the two archives to its default session cache first:
+
+```r
+cache_dir <- file.path(tempdir(), "asaData")
+dir.create(cache_dir, showWarnings = FALSE)
+file.copy(file.path(archive_dir, c("edition1.zip", "edition2.zip")),
+          cache_dir, overwrite = TRUE)
+Sys.setenv(ASADATA_RUN_EXAMPLES = "true")
+rmarkdown::render("vignettes/survival-examples.Rmd",
+                  output_dir = tempdir())
+Sys.unsetenv(c("ASADATA_TEST_ARCHIVES", "ASADATA_RUN_EXAMPLES"))
+```
+
+Regenerate help pages with `roxygen2::roxygenise()` and the reference manual with `R CMD Rd2pdf --no-preview --force --output=asaData-reference-manual.pdf .`. A regular `R CMD build .` and `R CMD check` require no Wiley access. When updating a source version, verify the changed files, dimensions, variables, and analysis results before changing any recorded checksum.

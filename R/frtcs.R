@@ -2,6 +2,9 @@
 #'
 #' Repeated blood-pressure measurements and follow-up for 697 participants in the FRTCS dataset used in Exercise 6 of Chapter 7.
 #'
+#' @name frtcs
+#' @section Download:
+#' Use \code{download_asa("frtcs")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 697 rows and 17 variables:
 #' \describe{
 #'   \item{id}{Integer. Participant identifier, 1 to 697.}
@@ -29,7 +32,9 @@
 #' @references
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @examples
-#' data(frtcs, package = "asaData")
+#' \dontrun{
+#' frtcs <- download_asa("frtcs")
 #' with(frtcs, summary(as.numeric(date_event - date0)))
+#' }
 #' @keywords datasets
-"frtcs"
+NULL

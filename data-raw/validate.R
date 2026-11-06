@@ -1,30 +1,33 @@
-# Verify every packaged value against the preserved source, independently of import.R.
-# Run from the package repository root: source("data-raw/validate.R").
+# Independently compare every imported value with separately downloaded Wiley files.
+# Run from the repository root with the current package installed.
 local({
-  manifest <- read.csv("inst/extdata/manifest.csv", stringsAsFactors = FALSE)
-  schema <- read.csv("inst/extdata/schema.csv", stringsAsFactors = FALSE)
-  datasets <- unique(manifest$dataset)
-  selected <- manifest$dataset[manifest$import]
-  stopifnot(nrow(manifest) == 18L, length(datasets) == 16L,
-            !anyNA(manifest$import), !anyDuplicated(selected),
-            setequal(selected, datasets), setequal(schema$dataset, datasets),
-            setequal(list.files("data", pattern = "\\.rda$"), paste0(datasets, ".rda")))
+  cache_dir <- Sys.getenv("ASADATA_TEST_ARCHIVES")
+  if (!nzchar(cache_dir)) stop("Set ASADATA_TEST_ARCHIVES to the directory containing edition1.zip and edition2.zip.")
+  stopifnot(all(file.exists(file.path(cache_dir, c("edition1.zip", "edition2.zip")))))
+  manifest <- asaData::asa_datasets()
+  schema <- read.csv("inst/metadata/schema.csv", stringsAsFactors = FALSE)
+  stopifnot(nrow(manifest) == 16L, !anyDuplicated(manifest$dataset),
+            setequal(schema$dataset, manifest$dataset))
   old_locale <- Sys.getlocale("LC_TIME")
   on.exit(Sys.setlocale("LC_TIME", old_locale), add = TRUE)
   Sys.setlocale("LC_TIME", "C")
+  scratch <- tempfile("asa-validate-")
+  dir.create(scratch)
+  on.exit(unlink(scratch, recursive = TRUE), add = TRUE)
   all_cells <- 0L
   for (i in seq_len(nrow(manifest))) {
     m <- manifest[i, ]
     s <- schema[schema$dataset == m$dataset, ]
-    paths <- file.path("inst", "extdata", c(m$data_file, m$codebook))
-    stopifnot(identical(unname(tools::md5sum(paths)), c(m$data_md5, m$codebook_md5)))
-    tokens <- scan(paths[1L], what = character(), quiet = TRUE)
+    archive <- file.path(cache_dir, paste0("edition", m$edition, ".zip"))
+    utils::unzip(archive, files = m$file, exdir = scratch, overwrite = TRUE)
+    file <- file.path(scratch, m$file)
+    stopifnot(identical(unname(tools::md5sum(file)), m$md5))
+    tokens <- scan(file, what = character(), quiet = TRUE)
     stopifnot(length(tokens) == m$rows * m$columns)
     raw <- matrix(tokens, ncol = m$columns, byrow = TRUE)
-    e <- new.env()
-    stopifnot(identical(load(file.path("data", paste0(m$dataset, ".rda")), envir = e), m$dataset))
-    x <- e[[m$dataset]]
-    stopifnot(is.data.frame(x), nrow(x) == m$rows, ncol(x) == m$columns,
+    x <- asaData::download_asa(m$dataset, cache_dir = cache_dir)
+    stopifnot(identical(x, asaData::read_asa(m$dataset, file)),
+              nrow(x) == m$rows, ncol(x) == m$columns,
               identical(names(x), s$variable),
               identical(as.integer(colSums(is.na(x))), as.integer(s$missing)))
     for (j in seq_len(ncol(x))) {
@@ -47,7 +50,6 @@ local({
     stopifnot(identical(documented, names(x)))
     all_cells <- all_cells + nrow(x) * ncol(x)
   }
-  message("Verified ", length(datasets), " packaged datasets against ", nrow(manifest),
-          " source files, ", all_cells, " source values, and all ", nrow(schema),
-          " variable definitions.")
+  message("Verified ", nrow(manifest), " datasets, ", all_cells,
+          " source values, and all ", nrow(schema), " variable definitions.")
 })

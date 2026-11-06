@@ -2,6 +2,9 @@
 #'
 #' The 453-record competing-risks exercise dataset from Chapter 9.
 #'
+#' @name comprisk
+#' @section Download:
+#' Use \code{download_asa("comprisk")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 453 rows and 6 variables:
 #' \describe{
 #'   \item{id}{Integer. Subject identifier.}
@@ -19,7 +22,9 @@
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @seealso \code{\link{cvdrisk}}
 #' @examples
-#' data(comprisk, package = "asaData")
+#' \dontrun{
+#' comprisk <- download_asa("comprisk")
 #' table(comprisk$ev_typ)
+#' }
 #' @keywords datasets
-"comprisk"
+NULL

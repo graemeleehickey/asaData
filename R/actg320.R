@@ -2,6 +2,9 @@
 #'
 #' The 1,151-record ACTG 320 HIV treatment-trial dataset described in Table 1.5.
 #'
+#' @name actg320
+#' @section Download:
+#' Use \code{download_asa("actg320")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 1,151 rows and 16 variables:
 #' \describe{
 #'   \item{id}{Integer. Participant identifier.}
@@ -36,7 +39,8 @@
 #' UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-3-regression-models-for-survival-data/}{Applied Survival Analysis, second edition: Chapter 3, Stata examples}. Table 3.2.
 #' @seealso \code{vignette("survival-examples", package = "asaData")} for longer analyses.
 #' @examples
-#' data(actg320, package = "asaData")
+#' \dontrun{
+#' actg320 <- download_asa("actg320")
 #' if (requireNamespace("survival", quietly = TRUE)) {
 #'   # Second edition, Table 3.2: AIDS-defining diagnosis or death.
 #'   actg_cox <- survival::coxph(
@@ -45,5 +49,6 @@
 #'   )
 #'   summary(actg_cox)
 #' }
+#' }
 #' @keywords datasets
-"actg320"
+NULL

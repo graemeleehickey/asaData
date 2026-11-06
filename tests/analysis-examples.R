@@ -1,5 +1,12 @@
 # Compare the executed help examples with the cited UCLA textbook results.
-if (requireNamespace("survival", quietly = TRUE)) local({
+if (nzchar(Sys.getenv("ASADATA_TEST_ARCHIVES")) &&
+    requireNamespace("survival", quietly = TRUE)) local({
+  cache_dir <- file.path(tempdir(), "asaData")
+  dir.create(cache_dir, showWarnings = FALSE)
+  archives <- file.path(Sys.getenv("ASADATA_TEST_ARCHIVES"),
+                        c("edition1.zip", "edition2.zip"))
+  stopifnot(all(file.exists(archives)),
+            all(file.copy(archives, cache_dir, overwrite = TRUE)))
   results <- new.env(parent = globalenv())
   figure_file <- tempfile(fileext = ".pdf")
   grDevices::pdf(figure_file)
@@ -11,7 +18,8 @@ if (requireNamespace("survival", quietly = TRUE)) local({
   for (topic in c("whas100", "bpd", "actg320", "gbcs", "uis",
                   "whas500", "grace1000")) {
     utils::example(topic, package = "asaData", character.only = TRUE,
-                   local = results, echo = FALSE, ask = FALSE)
+                   local = results, echo = FALSE, ask = FALSE,
+                   run.dontrun = TRUE)
   }
   close_to <- function(actual, reference, tolerance = 5e-7) {
     stopifnot(length(actual) == length(reference), all(is.finite(actual)),
@@ -51,4 +59,6 @@ if (requireNamespace("survival", quietly = TRUE)) local({
             sum(results$grace_intervals$tstop -
                   results$grace_intervals$tstart) == 109847.5)
   cat("All seven help examples matched the cited published results.\n")
-})
+}) else {
+  message("Analysis checks skipped: supply ASADATA_TEST_ARCHIVES and install survival.")
+}

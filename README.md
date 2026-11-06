@@ -5,7 +5,7 @@
 [![Datasets](https://img.shields.io/badge/datasets-16-006D77)](#datasets)
 [![Licence: GPL-3](https://img.shields.io/badge/licence-GPL--3-444444)](https://www.r-project.org/Licenses/GPL-3)
 
-`asaData` is an unofficial companion package to the first and second editions of *Applied Survival Analysis: Regression Modeling of Time to Event Data* by Hosmer and Lemeshow (1999), and Hosmer, Lemeshow, and May (2008). It contains 16 datasets from the two editions. Each dataset has a help page describing its variables, coding, units, and book edition. The package has no analysis functions or runtime package dependencies.
+`asaData` is an unofficial companion package to the first and second editions of *Applied Survival Analysis: Regression Modeling of Time to Event Data* by Hosmer and Lemeshow (1999), and Hosmer, Lemeshow, and May (2008). It downloads and imports 16 datasets directly from Wiley, preserving the original values and coding. Each dataset has a help page describing its variables, units, and book edition. No dataset records or original codebooks are bundled, and nothing is downloaded during installation or when the package is loaded. The package has no runtime package dependencies.
 
 ## Installation
 
@@ -18,8 +18,8 @@ remotes::install_github("graemeleehickey/asaData")
 
 ```r
 library(asaData)
-data(package = "asaData")
-data("whas500", package = "asaData")
+asa_datasets()
+whas500 <- download_asa("whas500")
 help("whas500", package = "asaData")
 head(whas500)
 
@@ -28,7 +28,25 @@ survival::survfit(survival::Surv(lenfol, fstat) ~ gender,
                   data = whas500)
 ```
 
-Variable names are lower case, category codes are numeric, calendar dates are R `Date` objects, and source missing-value dots become `NA`.
+The first request downloads the relevant edition archive over HTTPS. Further requests from that edition reuse the archive. By default, downloads are kept only for the current R session. Each import checks the source checksum, dimensions, missing-value counts, and variable types. Changed or damaged files are rejected.
+
+Variable names are lower case, category codes are numeric, calendar dates are R `Date` objects, and source missing-value dots become `NA`. Row order and numeric values are preserved.
+
+```r
+# Reuse the second-edition archive
+gbcs <- download_asa("gbcs")
+
+# Optionally keep downloads between R sessions
+whas500 <- download_asa("whas500", cache_dir = "~/asaData-cache")
+
+# Replace a damaged cached archive
+whas500 <- download_asa("whas500", refresh = TRUE)
+
+# Or read an original .dat file you have already downloaded and extracted
+whas500 <- read_asa("whas500", "path/to/whas500.dat")
+```
+
+Use the second-edition files for `recur` and `uis`. `read_asa()` applies the same source checks as `download_asa()`; edited files, files from another edition, and changed line endings may fail the checksum check.
 
 The [reference manual](https://github.com/graemeleehickey/asaData/blob/main/asaData-reference-manual.pdf) contains the package and dataset help pages.
 
@@ -39,9 +57,9 @@ The help pages for `whas100`, `bpd`, `actg320`, `gbcs`, `uis`, `whas500`, and `g
 ```r
 # Install the optional analysis package if needed
 install.packages("survival")
-example("actg320", package = "asaData")
+example("actg320", package = "asaData", run.dontrun = TRUE)
 
-# Build the vignette when installing from GitHub
+# Build the vignette (displays code without downloading or running analyses)
 remotes::install_github("graemeleehickey/asaData",
                         dependencies = TRUE, build_vignettes = TRUE)
 vignette("survival-examples", package = "asaData")
@@ -70,20 +88,13 @@ vignette("survival-examples", package = "asaData")
 
 Each row represents an observation. The recurrent-event data contain multiple intervals per participant, and the nested case-control data contain sampled risk-set records.
 
-The `recur` and `uis` datasets are extracted from the second-edition of the book, but are essentially the same as the first-edition copies. `uis` uses the second-edition name `beck`; the help page explains the differences in the codebooks. The `whasncc` dataset is different between the first and second edition of the book, and therefore both copies are kept. All other dataset names omit edition suffixes; the edition is identified in the table and help page.
+The shared `recur` and `uis` datasets use the second-edition files, whose values agree with the first-edition copies. `uis` uses the second-edition name `beck`; its help page explains the codebook differences. The editions have different WHAS nested case-control samples, accessed as `whasncc_e1` and `whasncc_e2`. All other dataset names omit edition suffixes; the edition is identified in the table and help page.
 
-## Original files and sources
+## Sources and checks
 
-All 18 original data files and their codebooks are included with the installed package. Locate them using:
+The [Wiley companion data site](https://ftp.wiley.com/public/sci_tech_med/survival/) provides first- and second-edition ZIP archives containing the original data files and codebooks. `download_asa()` retrieves these archives directly from Wiley. The [UCLA companion page](https://stats.oarc.ucla.edu/other/examples/asa2/) provides other download formats and analysis examples; it is not used as a download source by this package.
 
-```r
-system.file("extdata", package = "asaData")
-system.file("extdata", "edition2", "whas500.dat", package = "asaData")
-```
-
-The [Wiley companion data site](https://ftp.wiley.com/public/sci_tech_med/survival/) is the original download location. The [UCLA companion page](https://stats.oarc.ucla.edu/other/examples/asa2/) provides SAS and SPSS downloads for selected second-edition datasets, with analysis examples for Stata, SPSS, and SAS.
-
-The original files are stored under `inst/extdata/` in this repository. See the [data preparation instructions](https://github.com/graemeleehickey/asaData/blob/main/data-raw/README.md) for the import and validation commands.
+The package retains a file catalogue, source checksums, and variable definitions under `inst/metadata/`. Routine package checks use synthetic files and do not contact Wiley. Optional checks compare imports and analysis results using separately downloaded archives; see the [validation instructions](data-raw/README.md).
 
 ## Citation
 
@@ -94,4 +105,4 @@ Use `citation("asaData")` for the package and book references. Cite the relevant
 
 ## Licence
 
-`asaData` is distributed under the [GNU General Public License, version 3 (GPL-3)](https://www.r-project.org/Licenses/GPL-3). Third-party datasets and codebooks retain their existing rights.
+Package code and original documentation by Graeme L. Hickey are distributed under the [GNU General Public License, version 3 (GPL-3)](https://www.r-project.org/Licenses/GPL-3). This licence does not apply to downloaded datasets or codebooks. Those materials retain their existing rights; consult [Wiley’s terms](https://www.wiley.com/en-us/legal/terms) before downloading or reusing them.

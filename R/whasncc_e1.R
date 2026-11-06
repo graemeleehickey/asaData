@@ -2,6 +2,9 @@
 #'
 #' Nested case-control data for the Worcester Heart Attack Study, used in the Chapter 9 exercises.
 #'
+#' @name whasncc_e1
+#' @section Download:
+#' Use \code{download_asa("whasncc_e1")} to retrieve this dataset. Data are not included in the package.
 #' @format A data frame with 1,494 rows and 12 variables:
 #' \describe{
 #'   \item{set}{Integer. Matched case-control set identifier.}
@@ -29,8 +32,10 @@
 #' Hosmer, D. W., Jr. and Lemeshow, S. (1999). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. First edition. Wiley. ISBN 978-0-471-15410-5.
 #' @seealso \code{\link{whasncc_e2}}
 #' @examples
-#' data(whasncc_e1, package = "asaData")
+#' \dontrun{
+#' whasncc_e1 <- download_asa("whasncc_e1")
 #' table(table(whasncc_e1$set))
 #' with(whasncc_e1, table(case, fstat))
+#' }
 #' @keywords datasets
-"whasncc_e1"
+NULL

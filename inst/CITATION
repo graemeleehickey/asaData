@@ -1,10 +1,10 @@
 citHeader("Cite the package and the book edition relevant to the dataset used.")
 
 bibentry(bibtype = "Manual",
-  title = "asaData: Datasets from Hosmer and Colleagues' Applied Survival Analysis",
+  title = "asaData: Download Datasets from Applied Survival Analysis",
   author = person(c("Graeme", "L."), "Hickey"),
   year = "2026",
-  note = "R package version 0.1.0",
+  note = "R package version 0.2.0",
   url = "https://github.com/graemeleehickey/asaData")
 
 bibentry(bibtype = "Book",
