@@ -3,7 +3,7 @@
 [![R package checks](https://github.com/graemeleehickey/asaData/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/graemeleehickey/asaData/actions/workflows/R-CMD-check.yaml)
 [![R version](https://img.shields.io/badge/R-%3E%3D%203.5.0-276DC3)](https://www.r-project.org/)
 [![Datasets](https://img.shields.io/badge/datasets-16-006D77)](#datasets)
-[![Licence: GPL-3](https://img.shields.io/badge/licence-GPL--3-444444)](LICENSE.md)
+[![Licence: GPL-3](https://img.shields.io/badge/licence-GPL--3-444444)](https://www.r-project.org/Licenses/GPL-3)
 
 **Author: Graeme L. Hickey**
 
@@ -34,7 +34,7 @@ Variable names are lower case, category codes are numeric, calendar dates are R 
 
 ## Analysis examples
 
-The help pages for `whas100`, `bpd`, `actg320`, `gbcs`, `uis`, `whas500`, and `grace1000` include examples using the optional `survival` package. The [Survival analysis examples vignette](vignettes/survival-examples.Rmd) covers interactions, proportional-hazards diagnostics, time-dependent covariates, and parametric models, with comparisons against selected second-edition results presented by UCLA.
+The help pages for `whas100`, `bpd`, `actg320`, `gbcs`, `uis`, `whas500`, and `grace1000` include examples using the optional `survival` package. The [Survival analysis examples vignette](https://github.com/graemeleehickey/asaData/blob/main/vignettes/survival-examples.Rmd) covers interactions, proportional-hazards diagnostics, time-dependent covariates, and parametric models, with comparisons against selected second-edition results presented by UCLA.
 
 ```r
 # Install the optional analysis package if needed
@@ -83,7 +83,7 @@ system.file("extdata", "edition2", "whas500.dat", package = "asaData")
 
 The [Wiley companion data site](https://ftp.wiley.com/public/sci_tech_med/survival/) is the original download location. The [UCLA companion page](https://stats.oarc.ucla.edu/other/examples/asa2/) provides SAS and SPSS downloads for selected second-edition datasets, with analysis examples for Stata, SPSS, and SAS.
 
-The original files are stored under `inst/extdata/` in this repository. See [data-raw/README.md](data-raw/README.md) for the import and validation commands.
+The original files are stored under `inst/extdata/` in this repository. See the [data preparation instructions](https://github.com/graemeleehickey/asaData/blob/main/data-raw/README.md) for the import and validation commands.
 
 ## Citation
 
@@ -94,4 +94,4 @@ Use `citation("asaData")` for the package and book references. Cite the relevant
 
 ## Licence
 
-`asaData` is distributed under the [GNU General Public License, version 3 (GPL-3)](LICENSE.md). Third-party datasets and codebooks retain their existing rights. Their redistribution terms remain to be clarified before CRAN submission.
+`asaData` is distributed under the [GNU General Public License, version 3 (GPL-3)](https://www.r-project.org/Licenses/GPL-3). Third-party datasets and codebooks retain their existing rights. Their redistribution terms remain to be clarified before CRAN submission.
