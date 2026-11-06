@@ -3,13 +3,13 @@ Type: Package
 Title: Datasets from Hosmer and Colleagues' 'Applied Survival Analysis'
 Version: 0.1.0
 Authors@R: person(c("Graeme", "L."), "Hickey", email = "graemeleehickey@gmail.com", role = c("aut", "cre"))
-Description: Datasets from the first and second editions of 'Applied Survival
-    Analysis: Regression Modeling of Time to Event Data' by Hosmer and
-    Lemeshow (1999, ISBN:9780471154105), and Hosmer, Lemeshow, and May
-    (2008) <doi:10.1002/9780470258019>. Includes 16 datasets covering
+Description: An unofficial companion package to the first and second editions
+    of 'Applied Survival Analysis: Regression Modeling of Time to Event Data'
+    by Hosmer and Lemeshow (1999, ISBN:9780471154105), and Hosmer, Lemeshow,
+    and May (2008) <doi:10.1002/9780470258019>. Includes 16 datasets covering
     all 18 source files, with shared datasets represented once, original numeric
     coding, parsed dates, and documentation of variables and edition differences.
-License: file LICENSE
+License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
 LazyData: true

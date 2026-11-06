@@ -3,11 +3,11 @@
 [![R package checks](https://github.com/graemeleehickey/hoslemSurv/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/graemeleehickey/hoslemSurv/actions/workflows/R-CMD-check.yaml)
 [![R version](https://img.shields.io/badge/R-%3E%3D%203.5.0-276DC3)](https://www.r-project.org/)
 [![Datasets](https://img.shields.io/badge/datasets-16-006D77)](#datasets)
-[![Code licence: CC0](https://img.shields.io/badge/code_licence-CC0-444444)](LICENSE)
+[![Licence: GPL-3](https://img.shields.io/badge/licence-GPL--3-444444)](LICENSE.md)
 
 **Author: Graeme L. Hickey**
 
-`hoslemSurv` contains 16 datasets from both editions of *Applied Survival Analysis: Regression Modeling of Time to Event Data*: Hosmer and Lemeshow (1999), and Hosmer, Lemeshow, and May (2008). Each dataset has a help page describing its variables, coding, units, and book edition. The package has no analysis functions or runtime package dependencies.
+`hoslemSurv` is an unofficial companion package to the first and second editions of *Applied Survival Analysis: Regression Modeling of Time to Event Data* by Hosmer and Lemeshow (1999), and Hosmer, Lemeshow, and May (2008). It contains 16 datasets from the two editions. Each dataset has a help page describing its variables, coding, units, and book edition. The package has no analysis functions or runtime package dependencies.
 
 ## Installation
 
@@ -79,4 +79,4 @@ Use `citation("hoslemSurv")` for the package and book references. Cite the relev
 
 ## Licence
 
-Original package code, documentation, and artwork by Graeme L. Hickey are dedicated under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/), to the extent of his rights in those contributions. Third-party datasets and codebooks retain their existing rights. Their redistribution terms remain to be clarified before CRAN submission. See [LICENSE](LICENSE).
+`hoslemSurv` is distributed under the [GNU General Public License, version 3 (GPL-3)](LICENSE.md). Third-party datasets and codebooks retain their existing rights. Their redistribution terms remain to be clarified before CRAN submission.

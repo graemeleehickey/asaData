@@ -11,7 +11,7 @@
 \href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page}: SAS and SPSS downloads for selected second-edition datasets, with analysis examples for Stata, SPSS, and SAS.
 }
 \description{
-An unofficial data-only companion to the first and second editions of Applied Survival Analysis: Regression Modeling of Time to Event Data.
+An unofficial companion package to the first and second editions of Applied Survival Analysis: Regression Modeling of Time to Event Data.
 }
 \details{
 The package contains 16 datasets. Each help page identifies the book edition and describes the variables, category codes, units, and endpoints. The shared datasets \code{\link{recur}} and \code{\link{uis}} represent both editions using second-edition variable names. Only \code{\link{whasncc_e1}} and \code{\link{whasncc_e2}} retain edition suffixes because their records and variables differ.
@@ -25,7 +25,7 @@ Original data files and codebooks from both editions are included in the install
 
 \section{Licensing}{
 
-Original package code, documentation, and artwork by Graeme L. Hickey are dedicated under CC0 1.0 Universal, to the extent of his rights in those contributions. Third-party datasets and codebooks retain their existing rights; see the package LICENSE file.
+This package is distributed under the \href{https://www.r-project.org/Licenses/GPL-3}{GNU General Public License, version 3 (GPL-3)}. Third-party datasets and codebooks retain their existing rights.
 }
 
 \examples{

@@ -5,3 +5,4 @@
 ^\.Rproj\.user$
 ^.*\.Rcheck$
 ^.*\.tar\.gz$
+^LICENSE\.md$
