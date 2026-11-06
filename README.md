@@ -32,6 +32,8 @@ survival::survfit(survival::Surv(lenfol, fstat) ~ gender,
 
 Variable names are lower case, category codes are numeric, calendar dates are R `Date` objects, and source missing-value dots become `NA`.
 
+The [reference manual](https://github.com/graemeleehickey/asaData/blob/main/asaData-reference-manual.pdf) contains the package and dataset help pages.
+
 ## Analysis examples
 
 The help pages for `whas100`, `bpd`, `actg320`, `gbcs`, `uis`, `whas500`, and `grace1000` include examples using the optional `survival` package. The [Survival analysis examples vignette](https://github.com/graemeleehickey/asaData/blob/main/vignettes/survival-examples.Rmd) covers interactions, proportional-hazards diagnostics, time-dependent covariates, and parametric models, with comparisons against selected second-edition results presented by UCLA.
