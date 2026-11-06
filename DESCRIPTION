@@ -1,7 +1,7 @@
 Package: asaData
 Type: Package
 Title: Download Datasets from 'Applied Survival Analysis'
-Version: 0.2.2
+Version: 0.1.0
 Authors@R: person(c("Graeme", "L."), "Hickey", email = "graemeleehickey@gmail.com", role = c("aut", "cre"))
 Description: An unofficial companion package to the first and second editions
     of 'Applied Survival Analysis: Regression Modeling of Time to Event Data'
