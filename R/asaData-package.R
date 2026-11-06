@@ -3,7 +3,9 @@
 #' An unofficial companion package to the first and second editions of Applied Survival Analysis: Regression Modeling of Time to Event Data.
 #'
 #' @details
-#' Use \code{\link{asa_datasets}} to list the 16 supported datasets and \code{\link{download_asa}} to download and import one. Each help page identifies the book edition and describes the variables, category codes, units, and endpoints. The shared \code{\link{recur}} and \code{\link{uis}} datasets follow the second-edition definitions. The different WHAS nested case-control samples are available as \code{\link{whasncc_e1}} and \code{\link{whasncc_e2}}.
+#' Use \code{\link{download_asa_all}} to download all 16 datasets as a named list.
+#'
+#' Use \code{\link{download_asa}} for a single dataset. Each help page identifies the book edition and describes the variables, category codes, units, and endpoints. The shared \code{\link{recur}} and \code{\link{uis}} datasets follow the second-edition definitions. The different WHAS nested case-control samples are available as \code{\link{whasncc_e1}} and \code{\link{whasncc_e2}}.
 #'
 #' Variable names are lower case, category codes are numeric, calendar dates are \code{Date} objects, and missing-value dots are represented by \code{NA}. Source row order and numeric values are preserved.
 #' @section Source files:

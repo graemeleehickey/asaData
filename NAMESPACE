@@ -2,5 +2,6 @@
 
 export(asa_datasets)
 export(download_asa)
+export(download_asa_all)
 export(read_asa)
 export(read_asa_all)

@@ -3,7 +3,7 @@
 #' List the datasets supported by \code{download_asa()} without accessing the internet.
 #'
 #' @return A data frame with dataset names, the source edition, dimensions, source filenames, MD5 checksums, and archive URLs. The \code{ucla_file}, \code{ucla_md5}, and \code{ucla_url} columns are empty where no verified UCLA alternative is available. The shared \code{recur} and \code{uis} datasets download from the second-edition Wiley archive; \code{first_edition_md5} identifies their equivalent first-edition files for local imports.
-#' @seealso \code{\link{download_asa}}, \code{\link{read_asa}}, \code{\link{read_asa_all}}
+#' @seealso \code{\link{download_asa}}, \code{\link{download_asa_all}}, \code{\link{read_asa}}, \code{\link{read_asa_all}}
 #' @examples
 #' asa_datasets()
 #' @export
@@ -33,7 +33,7 @@ asa_datasets <- function() {
 #' @source \href{https://ftp.wiley.com/public/sci_tech_med/survival/}{Wiley companion data site}.
 #'
 #' \href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page}.
-#' @seealso \code{\link{asa_datasets}}, \code{\link{read_asa}}, \code{\link{whas500}}
+#' @seealso \code{\link{download_asa_all}}, \code{\link{asa_datasets}}, \code{\link{read_asa}}, \code{\link{whas500}}
 #' @examples
 #' \dontrun{
 #' whas500 <- download_asa("whas500")
@@ -50,6 +50,54 @@ download_asa <- function(name, cache_dir = file.path(tempdir(), "asaData"),
                          source = c("auto", "wiley", "ucla")) {
   metadata <- .asa_metadata(name)
   source <- match.arg(source)
+  .asa_download_arguments(cache_dir, refresh, quiet)
+  .asa_download_dataset(metadata, cache_dir, refresh, quiet, source)
+}
+
+#' Download All Applied Survival Analysis Datasets
+#'
+#' Download and import all 16 datasets in one call, using the checks and conversions described in \code{download_asa()}.
+#'
+#' @inheritParams download_asa
+#' @param source \code{"auto"} (default) or \code{"wiley"}. Automatic selection follows \code{download_asa()}, including verified UCLA alternatives where available. UCLA alone cannot supply all 16 datasets.
+#' @details Archives are shared between datasets. With no existing cache, a successful Wiley download requires only two archives. Each archive is downloaded at most once per call, including when \code{refresh = TRUE}. Valid cached archives are reused unless a refresh is requested.
+#'
+#' If any dataset cannot be imported, the function stops with an error naming that dataset and returns no partial list. Successfully validated downloads remain in the cache for a later attempt. A failed refresh does not silently reuse an older copy. Use \code{read_asa_all()} to import available datasets from saved archives without internet access.
+#' @return A named list of all 16 data frames, in the order used by \code{asa_datasets()}. No objects are assigned to the user's workspace. Use \code{list2env()} explicitly if separate objects are wanted.
+#' @seealso \code{\link{download_asa}}, \code{\link{read_asa_all}}, \code{\link{asa_datasets}}
+#' @examples
+#' \dontrun{
+#' datasets <- download_asa_all()
+#' names(datasets)
+#' head(datasets$whas500)
+#' # Keep the archives between R sessions.
+#' datasets <- download_asa_all(cache_dir = "~/asaData-cache")
+#' # Optional: create separate objects in your workspace.
+#' list2env(datasets, envir = .GlobalEnv)
+#' }
+#' @export
+download_asa_all <- function(cache_dir = file.path(tempdir(), "asaData"),
+                             refresh = FALSE, quiet = TRUE,
+                             source = c("auto", "wiley")) {
+  source <- match.arg(source)
+  .asa_download_arguments(cache_dir, refresh, quiet)
+  manifest <- asa_datasets()
+  result <- vector("list", nrow(manifest))
+  names(result) <- manifest$dataset
+  transfers <- new.env(parent = emptyenv())
+  for (i in seq_len(nrow(manifest))) {
+    result[[i]] <- tryCatch(
+      .asa_download_dataset(manifest[i, , drop = FALSE], cache_dir, refresh,
+                             quiet, source, transfers),
+      error = function(e) {
+        stop("Could not load all datasets: failed at '", manifest$dataset[i],
+             "'. No partial list was returned.\n", conditionMessage(e), call. = FALSE)
+      })
+  }
+  result
+}
+
+.asa_download_arguments <- function(cache_dir, refresh, quiet) {
   .asa_string(cache_dir, "cache_dir")
   if (!is.logical(refresh) || length(refresh) != 1L || is.na(refresh)) {
     stop("'refresh' must be TRUE or FALSE.", call. = FALSE)
@@ -57,6 +105,11 @@ download_asa <- function(name, cache_dir = file.path(tempdir(), "asaData"),
   if (!is.logical(quiet) || length(quiet) != 1L || is.na(quiet)) {
     stop("'quiet' must be TRUE or FALSE.", call. = FALSE)
   }
+}
+
+.asa_download_dataset <- function(metadata, cache_dir, refresh, quiet, source,
+                                    transfers = NULL) {
+  name <- metadata$dataset
   sources <- if (source == "auto") c("wiley", "ucla") else source
   if (!nzchar(metadata$ucla_file)) {
     if (source == "ucla") {
@@ -79,7 +132,7 @@ download_asa <- function(name, cache_dir = file.path(tempdir(), "asaData"),
   failures <- character()
   for (site in sources) {
     result <- tryCatch(.asa_download_source(metadata, archives[[site]], site,
-                                            refresh, quiet), error = identity)
+                                            refresh, quiet, transfers), error = identity)
     if (!inherits(result, "error")) {
       if (source == "auto" && site == "ucla") {
         message("Using the verified UCLA copy of '", name, "'.")
@@ -95,18 +148,31 @@ download_asa <- function(name, cache_dir = file.path(tempdir(), "asaData"),
        "\nUse read_asa() with a local data file, ZIP archive, or folder.", call. = FALSE)
 }
 
-.asa_download_source <- function(metadata, archive, source, refresh, quiet) {
+.asa_download_source <- function(metadata, archive, source, refresh, quiet,
+                                  transfers = NULL) {
+  if (!is.null(transfers) && exists(archive, envir = transfers, inherits = FALSE)) {
+    previous <- get(archive, envir = transfers, inherits = FALSE)
+    if (inherits(previous, "error")) stop(previous)
+    return(.asa_read_archive(archive, metadata, source))
+  }
   if (file.exists(archive) && !refresh) {
     return(.asa_read_archive(archive, metadata, source))
   }
   candidate <- tempfile("asa-download-", tmpdir = dirname(archive), fileext = ".zip")
   on.exit(unlink(candidate), add = TRUE)
   url <- if (source == "wiley") metadata$url else metadata$ucla_url
-  .asa_fetch(url, candidate, quiet)
-  result <- .asa_read_archive(candidate, metadata, source)
-  if (!file.copy(candidate, archive, overwrite = TRUE)) {
-    stop("Cannot save the validated archive to: ", archive, call. = FALSE)
+  result <- tryCatch({
+    .asa_fetch(url, candidate, quiet)
+    value <- .asa_read_archive(candidate, metadata, source)
+    if (!file.copy(candidate, archive, overwrite = TRUE)) {
+      stop("Cannot save the validated archive to: ", archive, call. = FALSE)
+    }
+    value
+  }, error = identity)
+  if (!is.null(transfers)) {
+    assign(archive, if (inherits(result, "error")) result else TRUE, envir = transfers)
   }
+  if (inherits(result, "error")) stop(result)
   result
 }
 
@@ -166,7 +232,7 @@ read_asa <- function(name, file) {
 #'
 #' Original filenames inside archives or folders are used to identify candidate data files; archive filenames may be changed. Codebooks and unsupported files are ignored. Every recognised data file must pass its source checksum and data checks, including duplicate copies. A damaged recognised file stops the import with an error. When Wiley and UCLA copies are both supplied, Wiley is used. Files are extracted only to temporary storage and removed after import.
 #' @return A named list of data frames, in the order used by \code{asa_datasets()}. Only datasets available in the supplied paths are included. Use \code{names()} to see which were imported. An error is raised if no supported data files are found. Optionally use \code{list2env()} to create separate objects explicitly.
-#' @seealso \code{\link{read_asa}}, \code{\link{download_asa}}, \code{\link{asa_datasets}}
+#' @seealso \code{\link{read_asa}}, \code{\link{download_asa_all}}, \code{\link{download_asa}}, \code{\link{asa_datasets}}
 #' @examples
 #' \dontrun{
 #' # Both Wiley ZIP archives saved in one folder: returns all 16 datasets.

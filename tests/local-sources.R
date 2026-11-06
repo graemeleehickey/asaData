@@ -51,6 +51,7 @@ if (nzchar(Sys.getenv("ASADATA_TEST_ARCHIVES"))) local({
   all_data <- read_asa_all(paths)
   manifest <- asa_datasets()
   stopifnot(identical(names(all_data), manifest$dataset),
+            identical(download_asa_all(folder, source = "wiley"), all_data),
             length(read_asa_all(paths[1L])) == 5L,
             length(read_asa_all(paths[2L])) == 13L)
   for (name in names(all_data)) {

@@ -1,3 +1,8 @@
+# asaData 0.2.2
+
+- Add `download_asa_all()` to download and import all 16 datasets as a named list, using the existing source checks and UCLA fallback.
+- Download each archive at most once per call, including when refreshing. If any dataset fails, report its name and return no partial list; successful downloads remain cached.
+
 # asaData 0.2.1
 
 - Add automatic UCLA fallback for six datasets, with explicit `source = "wiley"` and `source = "ucla"` choices. Converted UCLA copies reproduce Wiley's values, types, and row order exactly.

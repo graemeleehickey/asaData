@@ -16,5 +16,5 @@ List the datasets supported by \code{download_asa()} without accessing the inter
 asa_datasets()
 }
 \seealso{
-\code{\link{download_asa}}, \code{\link{read_asa}}, \code{\link{read_asa_all}}
+\code{\link{download_asa}}, \code{\link{download_asa_all}}, \code{\link{read_asa}}, \code{\link{read_asa_all}}
 }

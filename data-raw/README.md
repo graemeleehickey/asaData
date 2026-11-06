@@ -6,19 +6,19 @@ The package downloads Wiley archives, with verified UCLA alternatives for six da
 
 Routine `R CMD check` runs synthetic-file tests without contacting either site. These cover downloads, fallback, archive reuse, refresh failures, checksum rejection, batch imports, malformed input, date conversion, numeric precision, and missing-value handling. Dataset help pages and the vignette display download examples without running them automatically.
 
-For checks against the original data, install the current package and run the following from the repository root. The first two calls download each Wiley archive once. Keep the archive directory outside the repository.
+For checks against the original data, install the current package and run the following from the repository root. `download_asa_all()` downloads each Wiley archive once. Keep the archive directory outside the repository.
 
 ```r
 library(asaData)
 archive_dir <- file.path(tempdir(), "asaData-validation")
-invisible(download_asa("hmohiv", cache_dir = archive_dir, source = "wiley"))
-invisible(download_asa("whas500", cache_dir = archive_dir, source = "wiley"))
+invisible(download_asa_all(cache_dir = archive_dir, source = "wiley"))
 invisible(download_asa("whas500", cache_dir = archive_dir, source = "ucla"))
 Sys.setenv(ASADATA_TEST_ARCHIVES = archive_dir)
 Sys.setenv(ASADATA_TEST_UCLA_ARCHIVE = file.path(archive_dir, "ucla-asa2-spss.zip"))
 source("data-raw/validate.R")
 source("tests/data-integrity.R")
 source("tests/local-sources.R")
+source("tests/download-all.R")
 source("tests/analysis-examples.R") # Requires survival
 source("data-raw/verify-gbcs.R")    # Optional; requires TH.data
 ```

@@ -55,5 +55,5 @@ whas500 <- download_asa("whas500", cache_dir = "~/asaData-cache")
 }
 }
 \seealso{
-\code{\link{asa_datasets}}, \code{\link{read_asa}}, \code{\link{whas500}}
+\code{\link{download_asa_all}}, \code{\link{asa_datasets}}, \code{\link{read_asa}}, \code{\link{whas500}}
 }

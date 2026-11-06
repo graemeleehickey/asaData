@@ -33,5 +33,5 @@ list2env(datasets, envir = .GlobalEnv)
 }
 }
 \seealso{
-\code{\link{read_asa}}, \code{\link{download_asa}}, \code{\link{asa_datasets}}
+\code{\link{read_asa}}, \code{\link{download_asa_all}}, \code{\link{download_asa}}, \code{\link{asa_datasets}}
 }

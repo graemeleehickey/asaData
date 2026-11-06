@@ -16,6 +16,21 @@ remotes::install_github("graemeleehickey/asaData")
 
 ## Use
 
+Download and load all 16 datasets in one call:
+
+```r
+library(asaData)
+datasets <- download_asa_all()
+head(datasets$whas500)
+
+# Optional: create separate objects in your workspace
+list2env(datasets, envir = .GlobalEnv)
+```
+
+`download_asa_all()` returns a named list and downloads each required archive at most once. Use `cache_dir = "~/asaData-cache"` to keep archives between sessions or `refresh = TRUE` to replace cached copies. If any dataset cannot be loaded, the call stops with an error naming that dataset and returns no partial list; successful downloads remain cached. UCLA alone cannot supply all 16 datasets.
+
+To download an individual dataset:
+
 ```r
 library(asaData)
 asa_datasets()
