@@ -8,19 +8,19 @@
 \source{
 \href{https://ftp.wiley.com/public/sci_tech_med/survival/}{Wiley companion data site}.
 
-\href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page}: analysis examples and other download formats for selected second-edition datasets.
+\href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page}: examples and alternative data files.
 }
 \description{
 An unofficial companion package to the first and second editions of Applied Survival Analysis: Regression Modeling of Time to Event Data.
 }
 \details{
-Use \code{\link{asa_datasets}} to list the 16 supported datasets and \code{\link{download_asa}} to download and import one. Each help page identifies the book edition and describes the variables, category codes, units, and endpoints. The shared \code{\link{recur}} and \code{\link{uis}} datasets use the second-edition source files. The different WHAS nested case-control samples are available as \code{\link{whasncc_e1}} and \code{\link{whasncc_e2}}.
+Use \code{\link{asa_datasets}} to list the 16 supported datasets and \code{\link{download_asa}} to download and import one. Each help page identifies the book edition and describes the variables, category codes, units, and endpoints. The shared \code{\link{recur}} and \code{\link{uis}} datasets follow the second-edition definitions. The different WHAS nested case-control samples are available as \code{\link{whasncc_e1}} and \code{\link{whasncc_e2}}.
 
 Variable names are lower case, category codes are numeric, calendar dates are \code{Date} objects, and missing-value dots are represented by \code{NA}. Source row order and numeric values are preserved.
 }
 \section{Source files}{
 
-No dataset records or original codebooks are included in the package. Wiley archives are downloaded only when requested and cached for the current R session by default. Use \code{\link{read_asa}} to import an original data file already on your computer. Every import checks the source checksum, dimensions, missing-value counts, and variable types.
+No dataset records or original codebooks are included in the package. Downloads prefer Wiley, with verified UCLA alternatives for six datasets, and are cached for the current R session by default. Use \code{\link{read_asa}} to import one dataset from a local file, ZIP archive, or folder, or \code{\link{read_asa_all}} to import all available datasets together. Supplying both Wiley archives to \code{read_asa_all()} returns a named list of all 16 datasets without internet access. Every import checks the source checksum, dimensions, missing-value counts, and variable types.
 }
 
 \section{Licensing}{

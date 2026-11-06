@@ -1,19 +1,23 @@
 Package: asaData
 Type: Package
 Title: Download Datasets from 'Applied Survival Analysis'
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: person(c("Graeme", "L."), "Hickey", email = "graemeleehickey@gmail.com", role = c("aut", "cre"))
 Description: An unofficial companion package to the first and second editions
     of 'Applied Survival Analysis: Regression Modeling of Time to Event Data'
     by Hosmer and Lemeshow (1999) <ISBN:9780471154105>, and Hosmer, Lemeshow,
     and May (2008) <doi:10.1002/9780470258019>. Downloads and imports 16 datasets
-    directly from Wiley companion archives, with source checksums, original
-    numeric coding, parsed dates, and documentation of variables and edition
-    differences. No dataset records or original codebooks are included.
+    from Wiley companion archives, with verified UCLA alternatives for six
+    datasets and offline imports from local files, archives, or folders.
+    Preserves original numeric coding and dates, checks source files, and
+    documents variables and edition differences. No dataset records or
+    original codebooks are included.
 License: GPL-3
 Encoding: UTF-8
 Language: en-GB
 Depends: R (>= 3.5.0)
+Imports:
+    foreign
 Suggests:
     survival,
     knitr,

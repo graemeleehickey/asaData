@@ -5,13 +5,16 @@
 \title{Download an Applied Survival Analysis Dataset}
 \source{
 \href{https://ftp.wiley.com/public/sci_tech_med/survival/}{Wiley companion data site}.
+
+\href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page}.
 }
 \usage{
 download_asa(
   name,
   cache_dir = file.path(tempdir(), "asaData"),
   refresh = FALSE,
-  quiet = TRUE
+  quiet = TRUE,
+  source = c("auto", "wiley", "ucla")
 )
 }
 \arguments{
@@ -22,21 +25,23 @@ download_asa(
 \item{refresh}{Download the archive again, even if a cached copy exists. The previous copy is retained if downloading or validating the replacement fails.}
 
 \item{quiet}{Suppress download progress messages.}
+
+\item{source}{\code{"auto"}, \code{"wiley"}, or \code{"ucla"}. The default is \code{"auto"}: reuse cached archives, preferring Wiley, then try downloading from Wiley followed by UCLA. UCLA is available for six verified datasets only. A message identifies automatic use of UCLA, even when \code{quiet = TRUE}.}
 }
 \value{
 A data frame. No objects are assigned to the user's workspace. Download and validation failures produce an informative error.
 }
 \description{
-Download a Wiley companion archive and return the selected dataset as an R data frame.
+Download a companion archive from Wiley or UCLA and return the selected dataset as an R data frame.
 }
 \details{
-Wiley supplies one ZIP archive per edition. The first request for an edition downloads that archive, including its accompanying codebooks; later requests reuse it. Only the requested data file is extracted, to temporary storage. Nothing is downloaded when the package is installed or loaded.
+Wiley supplies one ZIP archive per edition. UCLA supplies an SPSS archive; verified alternatives are available for \code{bpd}, \code{gbcs}, \code{grace1000}, \code{uis}, \code{whas100}, and \code{whas500}. Other UCLA copies are not substituted because they are absent, incomplete, or have not been verified against Wiley. Only the requested data file is extracted, to temporary storage. Nothing is downloaded when the package is installed or loaded.
 
-Every returned dataset is checked against the recorded source checksum, dimensions, missing-value counts, and variable types. A changed or damaged file is rejected. Use \code{refresh = TRUE} to replace a damaged cache; if Wiley has changed the source, the package metadata will need updating.
+Every source file is checked against its recorded checksum, and every returned dataset is checked for dimensions, missing-value counts, and variable types. Changed or damaged files are rejected. With automatic selection, a failed download or rejected file triggers the next available source; errors from both sources are reported if neither succeeds. Use \code{refresh = TRUE} to bypass cached copies. Each source has a separate cache, and a failed replacement leaves the previous copy intact.
 
-Variable names are lower case, category codes remain numeric, calendar dates become \code{Date} objects, and source missing-value dots become \code{NA}. Row order and numeric values are preserved. The shared \code{recur} and \code{uis} datasets use the second-edition files; the two WHAS nested case-control samples have separate names.
+Variable names are lower case, category codes remain numeric, calendar dates become \code{Date} objects, and missing values become \code{NA}. UCLA imports use \pkg{foreign}. Names and dates are converted to the Wiley definitions, WHAS100 rows are restored to ID order, UIS Beck scores are rounded to three decimal places, and WHAS BMI values are rounded to five decimal places. These conversions reproduce all Wiley values and row orders for the six supported copies. The shared \code{recur} and \code{uis} datasets use the second-edition definitions; the two WHAS nested case-control samples have separate names.
 
-The package contains no dataset records or original codebooks. The GPL-3 licence covers the package code and original documentation, not downloaded materials. Consult the source terms before downloading or reusing the data. A local source file can instead be imported with \code{read_asa()}.
+The package contains no dataset records or original codebooks. The GPL-3 licence covers the package code and original documentation, not downloaded materials. Consult the source terms before downloading or reusing the data. For offline use, pass a saved file, ZIP archive, or folder to \code{read_asa()}.
 }
 \examples{
 \dontrun{
@@ -44,6 +49,9 @@ whas500 <- download_asa("whas500")
 head(whas500)
 # The second-edition archive is reused for this request.
 gbcs <- download_asa("gbcs")
+# Select a source explicitly, or keep copies between sessions.
+whas500 <- download_asa("whas500", source = "ucla")
+whas500 <- download_asa("whas500", cache_dir = "~/asaData-cache")
 }
 }
 \seealso{

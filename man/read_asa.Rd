@@ -9,22 +9,27 @@ read_asa(name, file)
 \arguments{
 \item{name}{A single dataset name from \code{asa_datasets()}.}
 
-\item{file}{Path to the original, unmodified \file{.dat} file, extracted from the appropriate Wiley archive.}
+\item{file}{Path to an original Wiley \file{.dat} file, a supported UCLA \file{.sav} file, either site's ZIP archive, or a folder containing these files.}
 }
 \value{
 A data frame with the variables described in the corresponding dataset help page.
 }
 \description{
-Import an original Wiley \file{.dat} file without accessing the internet or writing a cache.
+Import a saved data file, ZIP archive, or folder without accessing the internet or writing a cache.
 }
 \details{
-The same checksum, layout, and type checks are used as for \code{download_asa()}. Files from another edition, edited files, and files with changed line endings are rejected if their checksums differ. For \code{recur} and \code{uis}, use the second-edition file.
+The same source checks and conversions are used as for \code{download_asa()}. Edited files and files with changed line endings are rejected if their checksums differ. Either edition's original \code{recur} and \code{uis} files is accepted; values agree, and the returned names follow the second edition. Other files must match the requested edition. UCLA support is limited to the six datasets listed in \code{download_asa()}.
+
+In a folder, the function looks for the expected Wiley filename, then the supported UCLA filename, then an archive named \file{edition1.zip} or \file{edition2.zip} as appropriate, Wiley's original archive name, \file{ucla-asa2-spss.zip}, or \file{asa2_spss.zip}. The first matching file is checked; an invalid copy is reported rather than silently skipped. Subfolders are not searched. Keep different editions in separate folders because some filenames are shared. A ZIP archive supplied directly may have any filename ending in \file{.zip}.
 }
 \examples{
 \dontrun{
 whas500 <- read_asa("whas500", "path/to/whas500.dat")
+whas500 <- read_asa("whas500", "path/to/Second-Edition Data.zip")
+whas500 <- read_asa("whas500", "~/asaData-cache")
+whas500 <- read_asa("whas500", "path/to/asa2_spss.zip")
 }
 }
 \seealso{
-\code{\link{download_asa}}, \code{\link{asa_datasets}}
+\code{\link{download_asa}}, \code{\link{asa_datasets}}, \code{\link{read_asa_all}}
 }

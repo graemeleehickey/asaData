@@ -5,7 +5,7 @@
 [![Datasets](https://img.shields.io/badge/datasets-16-006D77)](#datasets)
 [![Licence: GPL-3](https://img.shields.io/badge/licence-GPL--3-444444)](https://www.r-project.org/Licenses/GPL-3)
 
-`asaData` is an unofficial companion package to the first and second editions of *Applied Survival Analysis: Regression Modeling of Time to Event Data* by Hosmer and Lemeshow (1999), and Hosmer, Lemeshow, and May (2008). It downloads and imports 16 datasets directly from Wiley, preserving the original values and coding. Each dataset has a help page describing its variables, units, and book edition. No dataset records or original codebooks are bundled, and nothing is downloaded during installation or when the package is loaded. The package has no runtime package dependencies.
+`asaData` is an unofficial companion package to the first and second editions of *Applied Survival Analysis: Regression Modeling of Time to Event Data* by Hosmer and Lemeshow (1999), and Hosmer, Lemeshow, and May (2008). It downloads 16 datasets from Wiley, offers verified UCLA alternatives for six datasets, and imports saved files or ZIP archives offline. Each dataset has a help page describing its variables, units, and book edition. No dataset records or original codebooks are bundled, and nothing is downloaded during installation or when the package is loaded. UCLA imports use `foreign`, a recommended package included with standard R installations.
 
 ## Installation
 
@@ -28,9 +28,9 @@ library(survival)
 survfit(Surv(lenfol, fstat) ~ gender, data = whas500)
 ```
 
-The first request downloads the relevant edition archive over HTTPS. Further requests from that edition reuse the archive. By default, downloads are kept only for the current R session. Each import checks the source checksum, dimensions, missing-value counts, and variable types. Changed or damaged files are rejected.
+The default `source = "auto"` reuses cached archives, preferring Wiley. If a download is needed, it tries Wiley, then a verified UCLA alternative if Wiley fails. UCLA is supported for `bpd`, `gbcs`, `grace1000`, `uis`, `whas100`, and `whas500`; automatic use of UCLA is reported in a message. By default, downloads are kept only for the current R session. Each import checks the source checksum, dimensions, missing-value counts, and variable types. Changed or damaged files are rejected.
 
-Variable names are lower case, category codes are numeric, calendar dates are R `Date` objects, and source missing-value dots become `NA`. Row order and numeric values are preserved.
+Variable names are lower case, category codes are numeric, calendar dates are R `Date` objects, and missing values become `NA`. The six UCLA alternatives are converted to reproduce Wiley's values, variable types, and row order exactly.
 
 ```r
 # Reuse the second-edition archive
@@ -42,11 +42,40 @@ whas500 <- download_asa("whas500", cache_dir = "~/asaData-cache")
 # Replace a damaged cached archive
 whas500 <- download_asa("whas500", refresh = TRUE)
 
-# Or read an original .dat file you have already downloaded and extracted
-whas500 <- read_asa("whas500", "path/to/whas500.dat")
+# Choose a source explicitly
+whas500 <- download_asa("whas500", source = "ucla")
+whas500 <- download_asa("whas500", source = "wiley")
 ```
 
-Use the second-edition files for `recur` and `uis`. `read_asa()` applies the same source checks as `download_asa()`; edited files, files from another edition, and changed line endings may fail the checksum check.
+## Use saved copies offline
+
+Download the [first-edition ZIP](https://ftp.wiley.com/public/sci_tech_med/survival/First-Edition%20Data.zip) and [second-edition ZIP](https://ftp.wiley.com/public/sci_tech_med/survival/Second-Edition%20Data.zip) yourself, then import all 16 datasets in one call. The archives do not need to be extracted.
+
+```r
+datasets <- read_asa_all(c("path/to/First-Edition Data.zip",
+                          "path/to/Second-Edition Data.zip"))
+names(datasets)
+head(datasets$whas500)
+
+# Or point to a folder containing both ZIP archives
+datasets <- read_asa_all("~/Downloads/asa-data")
+
+# Optional: create separate objects such as whas500, gbcs, and uis
+list2env(datasets, envir = .GlobalEnv)
+```
+
+`read_asa_all()` returns a named list containing the supported datasets found in the supplied archives or folders: five for the first edition, thirteen for the second edition, or all 16 when both editions are supplied. Shared datasets appear once. A [UCLA SPSS ZIP](https://stats.oarc.ucla.edu/wp-content/uploads/2016/02/asa2_spss.zip) supplies the six verified alternatives. Subfolders are not searched; keep extracted editions in separate folders and pass both paths if needed. Recognised files with invalid checksums stop the import. Nothing is downloaded or assigned to your workspace automatically.
+
+For a single dataset, supply an original data file, a saved ZIP, or a folder containing the expected files:
+
+```r
+whas500 <- read_asa("whas500", "path/to/whas500.dat")
+whas500 <- read_asa("whas500", "path/to/Second-Edition Data.zip")
+whas500 <- read_asa("whas500", "~/asaData-cache")
+whas500 <- read_asa("whas500", "path/to/asa2_spss.zip")
+```
+
+Local imports apply the same checks as downloads. Edited files and changed line endings may fail the checksum check. Either edition's original `recur` and `uis` files is accepted; the returned names follow the second edition. The WHAS nested case-control samples remain distinct.
 
 The [reference manual](https://github.com/graemeleehickey/asaData/blob/main/asaData-reference-manual.pdf) contains the package and dataset help pages.
 
@@ -87,13 +116,13 @@ vignette("survival-examples", package = "asaData")
 
 Each row represents an observation. The recurrent-event data contain multiple intervals per participant, and the nested case-control data contain sampled risk-set records.
 
-The shared `recur` and `uis` datasets use the second-edition files, whose values agree with the first-edition copies. `uis` uses the second-edition name `beck`; its help page explains the codebook differences. The editions have different WHAS nested case-control samples, accessed as `whasncc_e1` and `whasncc_e2`. All other dataset names omit edition suffixes; the edition is identified in the table and help page.
+The shared `recur` and `uis` datasets follow the second-edition definitions; their values agree with the first-edition copies. `uis` uses the second-edition name `beck`; its help page explains the codebook differences. The editions have different WHAS nested case-control samples, accessed as `whasncc_e1` and `whasncc_e2`. All other dataset names omit edition suffixes; the edition is identified in the table and help page.
 
 ## Sources and checks
 
-The [Wiley companion data site](https://ftp.wiley.com/public/sci_tech_med/survival/) provides first- and second-edition ZIP archives containing the original data files and codebooks. `download_asa()` retrieves these archives directly from Wiley. The [UCLA companion page](https://stats.oarc.ucla.edu/other/examples/asa2/) provides other download formats and analysis examples; it is not used as a download source by this package.
+The [Wiley companion data site](https://ftp.wiley.com/public/sci_tech_med/survival/) provides the original edition archives. The [UCLA companion page](https://stats.oarc.ucla.edu/other/examples/asa2/) provides SPSS and SAS copies and analysis examples. UCLA fallback uses only the six verified SPSS copies. Its ACTG SPSS file omits two outcomes, so it is not substituted. UCLA imports restore Wiley's variable names and dates, WHAS100 row order, UIS Beck scores to three decimal places, and WHAS BMI values to five decimal places. All returned values have been compared with the original Wiley files.
 
-The package retains a file catalogue, source checksums, and variable definitions under `inst/metadata/`. Routine package checks use synthetic files and do not contact Wiley. Optional checks compare imports and analysis results using separately downloaded archives; see the [validation instructions](data-raw/README.md).
+The package retains a file catalogue, source checksums, and variable definitions under `inst/metadata/`. Routine package checks use synthetic records without internet access. Optional checks compare batch imports, UCLA copies, and analysis results using separately downloaded archives; see the [validation instructions](data-raw/README.md).
 
 ## Citation
 
@@ -104,4 +133,4 @@ Use `citation("asaData")` for the package and book references. Cite the relevant
 
 ## Licence
 
-Package code and original documentation by Graeme L. Hickey are distributed under the [GNU General Public License, version 3 (GPL-3)](https://www.r-project.org/Licenses/GPL-3). This licence does not apply to downloaded datasets or codebooks. Those materials retain their existing rights; consult [Wiley’s terms](https://www.wiley.com/en-us/legal/terms) before downloading or reusing them.
+Package code and original documentation by Graeme L. Hickey are distributed under the [GNU General Public License, version 3 (GPL-3)](https://www.r-project.org/Licenses/GPL-3).

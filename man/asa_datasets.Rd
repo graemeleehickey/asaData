@@ -7,7 +7,7 @@
 asa_datasets()
 }
 \value{
-A data frame with dataset names, the source edition, dimensions, source filenames, MD5 checksums, and Wiley archive URLs. The shared \code{recur} and \code{uis} datasets use the second-edition archive.
+A data frame with dataset names, the source edition, dimensions, source filenames, MD5 checksums, and archive URLs. The \code{ucla_file}, \code{ucla_md5}, and \code{ucla_url} columns are empty where no verified UCLA alternative is available. The shared \code{recur} and \code{uis} datasets download from the second-edition Wiley archive; \code{first_edition_md5} identifies their equivalent first-edition files for local imports.
 }
 \description{
 List the datasets supported by \code{download_asa()} without accessing the internet.
@@ -16,5 +16,5 @@ List the datasets supported by \code{download_asa()} without accessing the inter
 asa_datasets()
 }
 \seealso{
-\code{\link{download_asa}}, \code{\link{read_asa}}
+\code{\link{download_asa}}, \code{\link{read_asa}}, \code{\link{read_asa_all}}
 }

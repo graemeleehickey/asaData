@@ -7,6 +7,8 @@ local({
   stopifnot(nrow(manifest) == 16L, !anyDuplicated(manifest$dataset),
             nrow(schema) == 175L, setequal(manifest$dataset, schema$dataset),
             length(unique(manifest$url)) == 2L,
+            sum(nzchar(manifest$ucla_url)) == 6L,
+            sum(nzchar(manifest$first_edition_md5)) == 2L,
             all(startsWith(manifest$url, "https://ftp.wiley.com/")),
             identical(data(package = "asaData")$results, matrix(character(), 0L, 4L,
               dimnames = list(NULL, c("Package", "LibPath", "Item", "Title")))),
@@ -43,7 +45,7 @@ local({
   # Use the real functions with a synthetic catalogue and a local transfer.
   # The installed namespace and the real Wiley records remain untouched.
   fixture <- new.env(parent = asNamespace("asaData"))
-  functions <- c("asa_datasets", "download_asa", "read_asa",
+  functions <- c("asa_datasets", "download_asa", "read_asa", "read_asa_all",
                  ls(asNamespace("asaData"), pattern = "^\\.asa_", all.names = TRUE))
   for (name in functions) {
     fn <- get(name, asNamespace("asaData"))
@@ -57,7 +59,7 @@ local({
   expected <- data.frame(id = 1:2, surfact = 0:1, ondays = c(12L, 20L), censor = 1:0)
   stopifnot(identical(fixture$read_asa("bpd", file), expected))
   expect_error(read_asa("bpd", file), "checksum")
-  expect_error(read_asa("bpd", scratch), "does not exist")
+  expect_error(read_asa("bpd", scratch), "checksum")
   expect_error(download_asa("bpd", cache_dir = file), "Cannot create cache")
 
   # Correct checksums alone are insufficient: values and layout are checked too.
@@ -134,35 +136,111 @@ local({
     stopifnot(file.copy(source_archive, destination, overwrite = TRUE))
   }), fixture)
   cache <- file.path(scratch, "cache")
-  actual <- fixture$download_asa("bpd", cache_dir = cache)
+  actual <- fixture$download_asa("bpd", source = "wiley", cache_dir = cache)
   stopifnot(identical(actual, expected), fixture$calls == 1L,
             identical(list.files(cache), "edition2.zip"))
   fixture$fail <- TRUE
-  stopifnot(identical(fixture$download_asa("bpd", cache_dir = cache), expected),
+  stopifnot(identical(fixture$download_asa("bpd", source = "wiley", cache_dir = cache), expected),
             fixture$calls == 1L)
   old_hash <- tools::md5sum(file.path(cache, "edition2.zip"))
-  expect_error(fixture$download_asa("bpd", cache_dir = cache, refresh = TRUE), "Simulated network failure")
+  expect_error(fixture$download_asa("bpd", source = "wiley", cache_dir = cache, refresh = TRUE), "Simulated network failure")
   stopifnot(identical(old_hash, tools::md5sum(file.path(cache, "edition2.zip"))),
             identical(list.files(cache), "edition2.zip"))
   fixture$fail <- FALSE
-  stopifnot(identical(fixture$download_asa("bpd", cache_dir = cache, refresh = TRUE), expected),
+  stopifnot(identical(fixture$download_asa("bpd", source = "wiley", cache_dir = cache, refresh = TRUE), expected),
             fixture$calls == 3L)
   # A downloaded HTML/error page must not replace a valid cached archive.
   fixture$source_archive <- file
-  expect_error(fixture$download_asa("bpd", cache_dir = cache, refresh = TRUE), "expected file")
+  expect_error(fixture$download_asa("bpd", source = "wiley", cache_dir = cache, refresh = TRUE), "expected file")
   stopifnot(identical(old_hash, tools::md5sum(file.path(cache, "edition2.zip"))),
             identical(list.files(cache), "edition2.zip"))
   fixture$source_archive <- archive
   writeLines("broken archive", file.path(cache, "edition2.zip"))
-  expect_error(fixture$download_asa("bpd", cache_dir = cache), "refresh = TRUE")
-  stopifnot(identical(fixture$download_asa("bpd", cache_dir = cache, refresh = TRUE), expected))
+  expect_error(fixture$download_asa("bpd", source = "wiley", cache_dir = cache), "refresh = TRUE")
+  stopifnot(identical(fixture$download_asa("bpd", source = "wiley", cache_dir = cache, refresh = TRUE), expected))
   # A valid ZIP containing modified records must also be rejected.
   changed <- file.path(scratch, "changed.zip")
   writeLines(c("1 0 99 1", "2 1 20 0"), file, useBytes = TRUE)
   utils::zip(changed, files = file, flags = "-j -q")
   fixture$source_archive <- changed
-  expect_error(fixture$download_asa("bpd", cache_dir = cache, refresh = TRUE), "checksum")
+  expect_error(fixture$download_asa("bpd", source = "wiley", cache_dir = cache, refresh = TRUE), "checksum")
   stopifnot(identical(old_hash, tools::md5sum(file.path(cache, "edition2.zip"))),
             identical(list.files(cache), "edition2.zip"))
-  cat("Synthetic import, download, cache, and failure checks passed.\n")
+  # Local paths and batch imports never use the network.
+  fixture$.asa_fetch <- function(...) stop("Unexpected network request.")
+  stopifnot(identical(fixture$read_asa("bpd", archive), expected),
+            identical(fixture$read_asa("bpd", cache), expected),
+            identical(fixture$read_asa_all(archive), list(bpd = expected)),
+            identical(fixture$read_asa_all(cache), list(bpd = expected)),
+            identical(fixture$read_asa_all(c(archive, archive)), list(bpd = expected)))
+  expect_error(fixture$read_asa_all(changed), "checksum")
+  expect_error(fixture$read_asa_all(file), "ZIP archives or folders")
+  expect_error(fixture$read_asa_all(character()), "'file'")
+  expect_error(fixture$read_asa_all(NA_character_), "'file'")
+  expect_error(fixture$read_asa_all("absent.zip"), "does not exist")
+  empty <- file.path(scratch, "empty")
+  dir.create(empty)
+  expect_error(fixture$read_asa_all(empty), "No supported data")
+  expect_error(fixture$read_asa("bpd", empty), "No supported local file")
+
+  # Simulate the two sources, including a failed Wiley download and UCLA reuse.
+  # The stand-in SPSS reader isolates transfer handling from format conversion.
+  sav <- file.path(scratch, "bpd.sav")
+  writeLines("synthetic SPSS transfer", sav)
+  ucla_archive <- file.path(scratch, "ucla.zip")
+  utils::zip(ucla_archive, files = sav, flags = "-j -q")
+  fixture$manifest$ucla_md5 <- unname(tools::md5sum(sav))
+  fixture$ucla_archive <- ucla_archive
+  fixture$source_archive <- archive
+  fixture$expected <- expected
+  fixture$fail_wiley <- TRUE
+  fixture$fail_ucla <- FALSE
+  fixture$sites <- character()
+  fixture$.asa_read_spss <- eval(quote(function(file, metadata) {
+    .asa_checksum(file, metadata, metadata$ucla_md5)
+    expected
+  }), fixture)
+  fixture$.asa_fetch <- eval(quote(function(url, destination, quiet) {
+    site <- if (grepl("ucla.edu", url, fixed = TRUE)) "ucla" else "wiley"
+    sites <<- c(sites, site)
+    if ((site == "wiley" && fail_wiley) || (site == "ucla" && fail_ucla)) {
+      stop(paste("Simulated failure from", site))
+    }
+    from <- if (site == "wiley") source_archive else ucla_archive
+    stopifnot(file.copy(from, destination, overwrite = TRUE))
+  }), fixture)
+  fallback <- file.path(scratch, "fallback")
+  stopifnot(identical(suppressMessages(fixture$download_asa("bpd", fallback)), expected),
+            identical(fixture$sites, c("wiley", "ucla")),
+            identical(list.files(fallback), "ucla-asa2-spss.zip"))
+  fixture$sites <- character()
+  fixture$fail_ucla <- TRUE
+  stopifnot(identical(suppressMessages(fixture$download_asa("bpd", fallback)), expected),
+            !length(fixture$sites),
+            identical(fixture$read_asa("bpd", fallback), expected),
+            identical(fixture$read_asa_all(fallback), list(bpd = expected)))
+  ucla_hash <- tools::md5sum(file.path(fallback, "ucla-asa2-spss.zip"))
+  expect_error(fixture$download_asa("bpd", fallback, refresh = TRUE), "Simulated failure from wiley")
+  expect_error(fixture$download_asa("bpd", fallback, refresh = TRUE), "Simulated failure from ucla")
+  stopifnot(identical(ucla_hash, tools::md5sum(file.path(fallback, "ucla-asa2-spss.zip"))),
+            identical(list.files(fallback), "ucla-asa2-spss.zip"))
+  fixture$sites <- character()
+  fixture$fail_ucla <- FALSE
+  stopifnot(identical(fixture$download_asa("bpd", fallback, refresh = TRUE, source = "ucla"), expected),
+            identical(fixture$sites, "ucla"))
+  fixture$fail_wiley <- FALSE
+  fixture$sites <- character()
+  stopifnot(identical(fixture$download_asa("bpd", fallback, refresh = TRUE), expected),
+            identical(fixture$sites, "wiley"))
+  # A corrupt Wiley cache can fall back, but must not be overwritten implicitly.
+  writeLines("invalid archive", file.path(fallback, "edition2.zip"))
+  fixture$sites <- character()
+  stopifnot(identical(suppressMessages(fixture$download_asa("bpd", fallback)), expected),
+            !length(fixture$sites),
+            identical(readLines(file.path(fallback, "edition2.zip")), "invalid archive"))
+  fixture$manifest <- manifest[manifest$dataset == "actg320", ]
+  expect_error(fixture$download_asa("actg320", fallback, source = "ucla"), "No verified UCLA copy")
+  fixture$fail_wiley <- TRUE
+  expect_error(fixture$download_asa("actg320", fallback, refresh = TRUE), "No verified UCLA copy")
+  cat("Synthetic import, download, fallback, batch, cache, and failure checks passed.\n")
 })

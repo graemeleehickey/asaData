@@ -12,3 +12,5 @@
 /inst/extdata/edition*/
 *.dat
 *.zip
+*.sav
+*.sas7bdat
