@@ -14,7 +14,7 @@
 An unofficial companion package to the first and second editions of Applied Survival Analysis: Regression Modeling of Time to Event Data.
 }
 \details{
-The package contains 16 datasets. Each help page identifies the book edition and describes the variables, category codes, units, and endpoints. The shared datasets \code{\link{recur}} and \code{\link{uis}} represent both editions using second-edition variable names. Only \code{\link{whasncc_e1}} and \code{\link{whasncc_e2}} retain edition suffixes because their records and variables differ.
+The package contains 16 datasets. Each help page identifies the book edition and describes the variables, category codes, units, and endpoints. The \code{\link{recur}} and \code{\link{uis}} datasets are extracted from the second-edition of the book, but are essentially the same as the first-edition copies. The \code{whasncc} dataset is different between the first and second edition of the book, and therefore both copies are kept.
 
 Variable names are lower case, category codes are numeric, calendar dates are \code{Date} objects, and missing-value dots are represented by \code{NA}. Source row order and numeric values are preserved.
 }

@@ -70,7 +70,7 @@ vignette("survival-examples", package = "asaData")
 
 Each row represents an observation. The recurrent-event data contain multiple intervals per participant, and the nested case-control data contain sampled risk-set records.
 
-`recur` and `uis` each represent both editions. `uis` uses the second-edition name `beck`; the help page explains the differences in the codebooks. `whasncc_e1` and `whasncc_e2` remain separate because their records and variables differ. All other dataset names omit edition suffixes; the edition is identified in the table and help page.
+The `recur` and `uis` datasets are extracted from the second-edition of the book, but are essentially the same as the first-edition copies. `uis` uses the second-edition name `beck`; the help page explains the differences in the codebooks. The `whasncc` dataset is different between the first and second edition of the book, and therefore both copies are kept. All other dataset names omit edition suffixes; the edition is identified in the table and help page.
 
 ## Original files and sources
 
