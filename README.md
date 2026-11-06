@@ -94,4 +94,4 @@ Use `citation("asaData")` for the package and book references. Cite the relevant
 
 ## Licence
 
-`asaData` is distributed under the [GNU General Public License, version 3 (GPL-3)](https://www.r-project.org/Licenses/GPL-3). Third-party datasets and codebooks retain their existing rights. Their redistribution terms remain to be clarified before CRAN submission.
+`asaData` is distributed under the [GNU General Public License, version 3 (GPL-3)](https://www.r-project.org/Licenses/GPL-3). Third-party datasets and codebooks retain their existing rights.
