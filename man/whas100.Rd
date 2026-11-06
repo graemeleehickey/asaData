@@ -34,13 +34,25 @@ Each row represents a patient. \code{lenfol} records mortality follow-up, with \
 }
 \examples{
 data(whas100, package = "asaData")
-str(whas100)
-head(whas100)
+if (requireNamespace("survival", quietly = TRUE)) {
+  # Second edition, Table 2.3 and Figure 2.2: all-cause mortality.
+  whas100_km <- survival::survfit(
+    survival::Surv(lenfol, fstat == 1) ~ 1,
+    data = whas100, conf.type = "log-log"
+  )
+  summary(whas100_km, times = c(6, 14, 44))
+  plot(whas100_km, xscale = 365.25, conf.int = FALSE,
+       xlab = "Years since admission", ylab = "Survival probability")
+}
 }
 \references{
 Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
+
+UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-2-descriptive-methods-for-survival-data/}{Applied Survival Analysis, second edition: Chapter 2, Stata examples}. Table 2.3 and Figure 2.2.
 }
 \seealso{
 \code{\link{whas}}, \code{\link{whas500}}
+
+\code{vignette("survival-examples", package = "asaData")} for longer analyses.
 }
 \keyword{datasets}

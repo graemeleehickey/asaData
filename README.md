@@ -32,6 +32,21 @@ survival::survfit(survival::Surv(lenfol, fstat) ~ gender,
 
 Variable names are lower case, category codes are numeric, calendar dates are R `Date` objects, and source missing-value dots become `NA`.
 
+## Analysis examples
+
+The help pages for `whas100`, `bpd`, `actg320`, `gbcs`, `uis`, `whas500`, and `grace1000` include examples using the optional `survival` package. The [Survival analysis examples vignette](vignettes/survival-examples.Rmd) covers interactions, proportional-hazards diagnostics, time-dependent covariates, and parametric models, with comparisons against selected second-edition results presented by UCLA.
+
+```r
+# Install the optional analysis package if needed
+install.packages("survival")
+example("actg320", package = "asaData")
+
+# Build the vignette when installing from GitHub
+remotes::install_github("graemeleehickey/asaData",
+                        dependencies = TRUE, build_vignettes = TRUE)
+vignette("survival-examples", package = "asaData")
+```
+
 ## Datasets
 
 | Dataset | Edition | Rows | Variables | Description |

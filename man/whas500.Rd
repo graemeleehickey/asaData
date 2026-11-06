@@ -49,13 +49,24 @@ The coding of \code{mitype} and \code{year} differs from that in \code{whas}.
 }
 \examples{
 data(whas500, package = "asaData")
-str(whas500)
-head(whas500)
+if (requireNamespace("survival", quietly = TRUE)) {
+  # Second edition, Table 5.3: all-cause mortality after admission.
+  whas500_cox <- survival::coxph(
+    survival::Surv(lenfol, fstat == 1) ~ age + hr + sysbp + diasbp + bmi +
+      gender + cvd + afb + chf + miord + mitype,
+    data = whas500, ties = "breslow"
+  )
+  summary(whas500_cox)
+}
 }
 \references{
 Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
+
+UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-5-model-development/}{Applied Survival Analysis, second edition: Chapter 5, Stata examples}. Table 5.3.
 }
 \seealso{
 \code{\link{whas}}, \code{\link{whas100}}, \code{\link{whasncc_e2}}
+
+\code{vignette("survival-examples", package = "asaData")} for longer analyses.
 }
 \keyword{datasets}

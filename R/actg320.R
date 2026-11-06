@@ -32,9 +32,18 @@
 #' @references
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
 #' @seealso \code{\link{actg320ncc}}
+#' @references
+#' UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-3-regression-models-for-survival-data/}{Applied Survival Analysis, second edition: Chapter 3, Stata examples}. Table 3.2.
+#' @seealso \code{vignette("survival-examples", package = "asaData")} for longer analyses.
 #' @examples
 #' data(actg320, package = "asaData")
-#' str(actg320)
-#' head(actg320)
+#' if (requireNamespace("survival", quietly = TRUE)) {
+#'   # Second edition, Table 3.2: AIDS-defining diagnosis or death.
+#'   actg_cox <- survival::coxph(
+#'     survival::Surv(time, censor == 1) ~ tx + age + sex + cd4 + priorzdv,
+#'     data = actg320, ties = "breslow"
+#'   )
+#'   summary(actg_cox)
+#' }
 #' @keywords datasets
 "actg320"

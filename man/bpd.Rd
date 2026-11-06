@@ -29,10 +29,28 @@ Each row represents a subject. \code{ondays} records time on oxygen, and \code{c
 }
 \examples{
 data(bpd, package = "asaData")
-str(bpd)
-head(bpd)
+if (requireNamespace("survival", quietly = TRUE)) {
+  # Second edition, Figure 2.11 and Table 2.17: time to oxygen discontinuation.
+  bpd_km <- survival::survfit(
+    survival::Surv(ondays, censor == 1) ~ surfact, data = bpd
+  )
+  plot(bpd_km, col = c("#0072B2", "#D55E00"), lty = 1:2,
+       conf.int = FALSE, xlab = "Days on oxygen",
+       ylab = "Probability of remaining on oxygen")
+  legend("topright", c("No surfactant", "Surfactant"),
+         col = c("#0072B2", "#D55E00"), lty = 1:2, bty = "n")
+  bpd_logrank <- survival::survdiff(
+    survival::Surv(ondays, censor == 1) ~ surfact, data = bpd
+  )
+  bpd_logrank
+}
 }
 \references{
 Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
+
+UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-2-descriptive-methods-for-survival-data/}{Applied Survival Analysis, second edition: Chapter 2, Stata examples}. Figure 2.11 and Table 2.17.
+}
+\seealso{
+\code{vignette("survival-examples", package = "asaData")} for longer analyses.
 }
 \keyword{datasets}

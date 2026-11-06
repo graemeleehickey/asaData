@@ -12,6 +12,11 @@ Description: An unofficial companion package to the first and second editions
 License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
+Suggests:
+    survival,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
 LazyData: true
 LazyDataCompression: xz
 URL: https://github.com/graemeleehickey/asaData

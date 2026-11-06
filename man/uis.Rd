@@ -41,12 +41,26 @@ The first-edition codebook defines \code{censor = 1} as return to drug use or lo
 }
 \examples{
 data(uis, package = "asaData")
-sum(complete.cases(uis))
-colSums(is.na(uis))
+if (requireNamespace("survival", quietly = TRUE)) {
+  # Second edition, Table 4.12: common sample for the drug-history models.
+  uis_analysis <- uis[complete.cases(uis[c("age", "ivhx")]), ]
+  uis_analysis$drug <- as.integer(uis_analysis$ivhx \%in\% c(2, 3))
+  uis_cox <- survival::coxph(
+    survival::Surv(time, censor == 1) ~ drug,
+    data = uis_analysis, ties = "breslow"
+  )
+  c(participants = uis_cox$n, events = uis_cox$nevent)
+  summary(uis_cox)
+}
 }
 \references{
 Hosmer, D. W., Jr. and Lemeshow, S. (1999). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. First edition. Wiley. ISBN 978-0-471-15410-5.
 
 Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
+
+UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-4-interpretation-of-a-fitted-proportional-hazards-regression-model/}{Applied Survival Analysis, second edition: Chapter 4, Stata examples}. Table 4.12.
+}
+\seealso{
+\code{vignette("survival-examples", package = "asaData")} for longer analyses.
 }
 \keyword{datasets}

@@ -1,0 +1,398 @@
+---
+title: "Survival analysis examples"
+author: "Graeme L. Hickey"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+bibliography: references.bib
+link-citations: true
+vignette: >
+  %\VignetteIndexEntry{Survival analysis examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>",
+                      fig.width = 7, fig.height = 4.5)
+options(width = 85)
+checks <- list()
+check_reference <- function(label, actual, reference, tolerance = 5e-7) {
+  if (!is.null(names(reference))) actual <- actual[names(reference)]
+  stopifnot(length(actual) == length(reference), all(is.finite(actual)))
+  difference <- max(abs(unname(actual) - unname(reference)))
+  if (difference > tolerance) {
+    stop(label, ": difference from the published result exceeds ", tolerance)
+  }
+  checks[[label]] <<- difference
+}
+```
+
+This vignette presents R analyses of seven datasets from the second edition of *Applied Survival Analysis* [@hosmer2008]. The analyses follow selected tables and figures presented in UCLA's Stata examples. All data are supplied by `asaData`; the calculations use the optional `survival` package.
+
+```{r packages}
+library(asaData)
+library(survival)
+```
+
+Follow-up is measured in days unless the code explicitly converts it to years. Event indicators equal 1 when the stated endpoint occurs. The Cox models use `ties = "breslow"` to match the cited UCLA output. Derived variables are created in separate analysis data frames.
+
+# Survival curves and treatment comparisons
+
+The WHAS 100-patient example follows Table 2.3 and Figure 2.2 [@ucla2]. The endpoint is all-cause mortality after hospital admission. UCLA calls the follow-up variables `foltime` and `folstatus`; their names in `asaData` are `lenfol` and `fstat`.
+
+```{r whas100-km, fig.cap="Kaplan-Meier estimate of survival after admission in the WHAS 100-patient dataset."}
+data(whas100, package = "asaData")
+whas100_km <- survfit(Surv(lenfol, fstat == 1) ~ 1,
+                     data = whas100, conf.type = "log-log")
+summary(whas100_km, times = c(6, 14, 44))
+plot(whas100_km, xscale = 365.25, conf.int = FALSE,
+     xlab = "Years since admission", ylab = "Survival probability")
+```
+
+```{r check-km, include=FALSE}
+check_reference("Table 2.3: survival estimates",
+                summary(whas100_km, times = c(6, 14, 44))$surv,
+                c(0.98, 0.97, 0.96), tolerance = 1e-12)
+stopifnot(nrow(whas100) == 100L, sum(whas100$fstat) == 51L)
+```
+
+For the BPD dataset, the event is discontinuation of oxygen. Survival therefore means remaining on oxygen. The following log-rank test compares the two surfactant groups, as in Table 2.17 [@ucla2]. A corresponding survival plot is included in `example("bpd", package = "asaData")`.
+
+```{r bpd-logrank}
+data(bpd, package = "asaData")
+bpd_logrank <- survdiff(Surv(ondays, censor == 1) ~ surfact, data = bpd)
+bpd_logrank
+```
+
+```{r check-bpd, include=FALSE}
+check_reference("Table 2.17: log-rank statistic", bpd_logrank$chisq,
+                5.62, tolerance = 0.005)
+stopifnot(nrow(bpd) == 78L, sum(bpd$censor) == 73L)
+```
+
+# Cox regression in ACTG 320
+
+Tables 3.1 and 3.2 compare treatment regimens without and with covariate adjustment [@ucla3]. Both models use all 1,151 participants and the composite endpoint of an AIDS-defining diagnosis or death; there are 96 events. `tx = 1` denotes a regimen containing indinavir. The numeric `sex` coding is retained to reproduce the published coefficient.
+
+```{r actg-models}
+data(actg320, package = "asaData")
+actg_unadjusted <- coxph(Surv(time, censor == 1) ~ tx,
+                        data = actg320, ties = "breslow")
+actg_adjusted <- coxph(
+  Surv(time, censor == 1) ~ tx + age + sex + cd4 + priorzdv,
+  data = actg320, ties = "breslow"
+)
+knitr::kable(
+  cbind(Coefficient = coef(actg_adjusted),
+        `Hazard ratio` = exp(coef(actg_adjusted))), digits = 6
+)
+exp(c(Unadjusted = coef(actg_unadjusted)[["tx"]],
+      Adjusted = coef(actg_adjusted)[["tx"]]))
+```
+
+```{r check-actg, include=FALSE}
+check_reference("Table 3.1: Cox coefficients", coef(actg_unadjusted),
+                c(tx = -0.6843186))
+check_reference("Table 3.2: Cox coefficients", coef(actg_adjusted),
+                c(tx = -0.6589906, age = 0.0283562, sex = 0.0972738,
+                  cd4 = -0.0165767, priorzdv = -0.0002931))
+stopifnot(actg_unadjusted$n == 1151L, actg_unadjusted$nevent == 96L,
+          actg_adjusted$n == 1151L, actg_adjusted$nevent == 96L)
+```
+
+# Interactions and a common analysis population
+
+## Hormone therapy and tumour size
+
+Table 4.11 uses the recurrence endpoint in the German Breast Cancer Study [@ucla4]. All 686 women are included, with 299 recurrences. The packaged `hormone` variable uses 1 for no therapy and 2 for therapy. A local 0/1 indicator gives the parameterisation used in the UCLA interaction model.
+
+```{r gbcs-models}
+data(gbcs, package = "asaData")
+gbcs_analysis <- transform(gbcs, hormone01 = as.integer(hormone == 2))
+gbcs_unadjusted <- coxph(Surv(rectime, censrec == 1) ~ hormone01,
+                         data = gbcs_analysis, ties = "breslow")
+gbcs_additive <- coxph(Surv(rectime, censrec == 1) ~ hormone01 + size,
+                       data = gbcs_analysis, ties = "breslow")
+gbcs_interaction <- coxph(Surv(rectime, censrec == 1) ~ hormone01 * size,
+                          data = gbcs_analysis, ties = "breslow")
+knitr::kable(summary(gbcs_interaction)$coefficients[, 1:3], digits = 6,
+             col.names = c("Coefficient", "Hazard ratio", "Standard error"))
+```
+
+In the interaction model, the log hazard ratio for hormone therapy at tumour size $s$ is $\beta_{\mathrm{hormone}} + s\beta_{\mathrm{interaction}}$. The following calculation illustrates this contrast at 20 mm and 40 mm.
+
+```{r gbcs-contrasts}
+size_mm <- c(20, 40)
+beta <- coef(gbcs_interaction)
+knitr::kable(data.frame(
+  `Tumour size (mm)` = size_mm,
+  `Hormone therapy hazard ratio` =
+    exp(beta["hormone01"] + size_mm * beta["hormone01:size"]),
+  check.names = FALSE
+), digits = 3)
+```
+
+```{r check-gbcs, include=FALSE}
+check_reference("Table 4.11: unadjusted model", coef(gbcs_unadjusted),
+                c(hormone01 = -0.3638988))
+check_reference("Table 4.11: additive model", coef(gbcs_additive),
+                c(hormone01 = -0.3734745, size = 0.0152507))
+check_reference("Table 4.11: interaction model", coef(gbcs_interaction),
+                c(hormone01 = -0.3941755, size = 0.0149727,
+                  `hormone01:size` = 0.0006522))
+stopifnot(gbcs_interaction$n == 686L, gbcs_interaction$nevent == 299L)
+```
+
+## Drug history and age in UIS
+
+Table 4.12 fits three models to the same 605 participants with observed `age` and `ivhx`, including 489 events [@ucla4]. Applying this restriction before fitting any model keeps the comparisons on a common population. The endpoint follows the second-edition coding of return to drug use; `?uis` describes the edition differences.
+
+```{r uis-baseline-models}
+data(uis, package = "asaData")
+uis_analysis <- uis[complete.cases(uis[c("age", "ivhx")]), ]
+uis_analysis$drug <- as.integer(uis_analysis$ivhx %in% c(2, 3))
+uis_drug <- coxph(Surv(time, censor == 1) ~ drug,
+                 data = uis_analysis, ties = "breslow")
+uis_additive <- coxph(Surv(time, censor == 1) ~ drug + age,
+                     data = uis_analysis, ties = "breslow")
+uis_interaction <- coxph(Surv(time, censor == 1) ~ drug * age,
+                        data = uis_analysis, ties = "breslow")
+knitr::kable(summary(uis_interaction)$coefficients[, 1:3], digits = 6,
+             col.names = c("Coefficient", "Hazard ratio", "Standard error"))
+```
+
+```{r check-uis-baseline, include=FALSE}
+check_reference("Table 4.12: drug history model", coef(uis_drug),
+                c(drug = 0.3210045))
+check_reference("Table 4.12: additive model", coef(uis_additive),
+                c(drug = 0.4394466, age = -0.0263792))
+check_reference("Table 4.12: interaction model", coef(uis_interaction),
+                c(drug = -0.0124116, age = -0.0372282,
+                  `drug:age` = 0.0148441))
+stopifnot(uis_drug$n == 605L, uis_drug$nevent == 489L,
+          uis_interaction$n == 605L, uis_interaction$nevent == 489L)
+```
+
+# Model specification and diagnostics in WHAS 500
+
+Table 5.3 fits the following multivariable Cox model for all-cause mortality [@ucla5]. It uses 500 patients and 215 deaths.
+
+```{r whas500-model}
+data(whas500, package = "asaData")
+whas500_cox <- coxph(
+  Surv(lenfol, fstat == 1) ~ age + hr + sysbp + diasbp + bmi +
+    gender + cvd + afb + chf + miord + mitype,
+  data = whas500, ties = "breslow"
+)
+knitr::kable(summary(whas500_cox)$coefficients[, 1:3], digits = 6,
+             col.names = c("Coefficient", "Hazard ratio", "Standard error"))
+```
+
+```{r check-whas500, include=FALSE}
+check_reference("Table 5.3: Cox coefficients", coef(whas500_cox),
+                c(age = 0.0486034, hr = 0.0104108, sysbp = 0.0003598,
+                  diasbp = -0.0105894, bmi = -0.0437268, gender = -0.2705711,
+                  cvd = 0.0073416, afb = 0.1280092, chf = 0.7735398,
+                  miord = 0.0438507, mitype = -0.1641189))
+stopifnot(whas500_cox$n == 500L, whas500_cox$nevent == 215L)
+```
+
+The model preceding Table 6.1 uses two powers of BMI and an age-by-sex interaction [@ucla6]. Fit this specification separately before assessing proportional hazards. Here, time is expressed in years, and the diagnostic uses an untransformed time axis.
+
+```{r whas500-diagnostics}
+whas_diagnostic_data <- transform(
+  whas500, years = lenfol / 365.25,
+  bmifp1 = (bmi / 10)^2, bmifp2 = (bmi / 10)^3,
+  gender_age = gender * age
+)
+whas_diagnostic_fit <- coxph(
+  Surv(years, fstat == 1) ~ bmifp1 + bmifp2 + age + hr +
+    diasbp + gender + chf + gender_age,
+  data = whas_diagnostic_data, ties = "breslow", x = TRUE
+)
+whas_ph <- cox.zph(whas_diagnostic_fit, transform = "identity")
+whas_ph
+```
+
+These diagnostic statistics are the current R calculations. They are not an exact reproduction of UCLA's older Stata tests. `cox.zph()` computes a score test; versions of `survival` before 3.0 used an approximation [@survival-zph]. The fitted Cox coefficients are checked against UCLA's model, while the diagnostic results are reported with the software version below.
+
+```{r whas500-ph-plot, fig.width=7, fig.height=3.6, fig.cap="Estimated time-dependent coefficients for age and congestive heart failure, with approximate confidence bands from cox.zph()."}
+local({
+  old_par <- par(mfrow = c(1, 2))
+  on.exit(par(old_par))
+  plot(whas_ph, var = "age", resid = FALSE,
+       xlab = "Years since admission")
+  plot(whas_ph, var = "chf", resid = FALSE,
+       xlab = "Years since admission")
+})
+```
+
+```{r check-diagnostic-model, include=FALSE}
+check_reference("Chapter 6: fitted Cox coefficients", coef(whas_diagnostic_fit),
+                c(bmifp1 = -0.6730201, bmifp2 = 0.1421257,
+                  age = 0.0605347, hr = 0.0116719, diasbp = -0.0107119,
+                  gender = 1.855257, chf = 0.823524, gender_age = -0.0276658))
+stopifnot(whas_diagnostic_fit$n == 500L,
+          whas_diagnostic_fit$nevent == 215L,
+          all(is.finite(whas_ph$table)),
+          all(whas_ph$table[, "p"] >= 0 & whas_ph$table[, "p"] <= 1))
+```
+
+# Time-dependent covariates
+
+## Treatment exit in UIS
+
+Tables 7.2 and 7.3 use all 628 UIS participants and 508 events [@ucla7]. This analysis uses treatment assignment and time of treatment exit, so it does not inherit the complete-case restriction from Table 4.12. Follow-up starts at admission. `off_tx` equals 0 while a participant remains in treatment and 1 after treatment exit at `los`.
+
+```{r uis-time-dependent}
+uis_intervals <- tmerge(uis, uis, id = id,
+                       drug_event = event(time, censor))
+uis_intervals <- tmerge(uis_intervals, uis, id = id,
+                       off_tx = tdc(los))
+uis_time_fit <- coxph(
+  Surv(tstart, tstop, drug_event) ~ treat * off_tx,
+  data = uis_intervals, ties = "breslow"
+)
+c(participants = length(unique(uis_intervals$id)),
+  intervals = nrow(uis_intervals), events = uis_time_fit$nevent)
+knitr::kable(summary(uis_time_fit)$coefficients[, 1:3], digits = 6,
+             col.names = c("Coefficient", "Hazard ratio", "Standard error"))
+```
+
+`tmerge()` creates intervals of the form `(tstart, tstop]`. A change at an event time applies to subsequent follow-up. With the interaction, the long-versus-short programme hazard ratio is `exp(beta_treat)` while in treatment and `exp(beta_treat + beta_interaction)` after exit.
+
+```{r uis-treatment-contrasts}
+beta <- coef(uis_time_fit)
+exp(c(`In treatment` = beta[["treat"]],
+      `After treatment exit` = beta[["treat"]] + beta[["treat:off_tx"]]))
+```
+
+```{r check-uis-time, include=FALSE}
+check_reference("Table 7.2: time-dependent UIS model", coef(uis_time_fit),
+                c(treat = -0.52389, off_tx = 2.270329,
+                  `treat:off_tx` = 0.6209768))
+stopifnot(length(unique(uis_intervals$id)) == 628L,
+          nrow(uis_intervals) == 1174L, uis_time_fit$nevent == 508L,
+          sum(uis_intervals$tstop - uis_intervals$tstart) == 147394,
+          all(uis_intervals$tstop > uis_intervals$tstart))
+```
+
+## Revascularisation in GRACE
+
+Tables 7.5 and 7.6 compare two encodings of revascularisation for mortality follow-up in 1,000 patients, with 324 deaths [@ucla7]. The first model uses whether revascularisation occurred at any point during follow-up. The second updates exposure at the recorded procedure time. Both adjust for inverse age, square-root systolic blood pressure, and ST-segment deviation.
+
+```{r grace-baseline}
+data(grace1000, package = "asaData")
+grace_baseline <- coxph(
+  Surv(days, death == 1) ~ revasc + I(1000 / age) + sqrt(sysbp) + stchange,
+  data = grace1000, ties = "breslow"
+)
+```
+
+For the time-dependent model, only patients who underwent revascularisation contribute an exposure-change record. Procedures at day zero define exposure from the start of follow-up; patients without a procedure remain unexposed.
+
+```{r grace-time-dependent}
+grace_intervals <- tmerge(grace1000, grace1000, id = id,
+                         death_event = event(days, death))
+grace_intervals <- tmerge(
+  grace_intervals, grace1000[grace1000$revasc == 1, ],
+  id = id, revasc_t = tdc(revascdays)
+)
+grace_time_fit <- coxph(
+  Surv(tstart, tstop, death_event) ~ revasc_t +
+    I(1000 / age) + sqrt(sysbp) + stchange,
+  data = grace_intervals, ties = "breslow"
+)
+c(patients = length(unique(grace_intervals$id)),
+  intervals = nrow(grace_intervals), deaths = grace_time_fit$nevent)
+knitr::kable(data.frame(
+  Model = c("Ever revascularised", "Time-dependent revascularisation"),
+  `Hazard ratio` = exp(c(coef(grace_baseline)[["revasc"]],
+                        coef(grace_time_fit)[["revasc_t"]])),
+  check.names = FALSE
+), digits = 3)
+```
+
+Using eventual treatment as a baseline covariate assigns treated status to the period before the procedure. The comparison illustrates why the timing of exposure matters. These observational associations are not estimates of a randomised treatment effect.
+
+```{r check-grace, include=FALSE}
+check_reference("Table 7.5: baseline GRACE model", coef(grace_baseline),
+                c(revasc = -0.5296277, `I(1000/age)` = -0.1890701,
+                  `sqrt(sysbp)` = -0.2072934, stchange = 0.5134163))
+check_reference("Table 7.6: time-dependent GRACE model", coef(grace_time_fit),
+                c(revasc_t = -0.2609491, `I(1000/age)` = -0.2020569,
+                  `sqrt(sysbp)` = -0.2146887, stchange = 0.500509))
+stopifnot(grace_baseline$n == 1000L, grace_baseline$nevent == 324L,
+          length(unique(grace_intervals$id)) == 1000L,
+          nrow(grace_intervals) == 1359L, grace_time_fit$nevent == 324L,
+          sum(grace_intervals$tstop - grace_intervals$tstart) == 109847.5,
+          all(grace_intervals$tstop > grace_intervals$tstart))
+```
+
+# Parametric survival models
+
+Tables 8.2 and 8.5 fit exponential and Weibull accelerated failure-time models to the WHAS 100-patient dataset [@ucla8]. Both use all 100 patients, with 51 deaths, and measure time in years. Each includes age, sex, their interaction, and BMI.
+
+```{r parametric-models}
+whas100_aft <- transform(whas100, years = lenfol / 365.25)
+exponential_fit <- survreg(
+  Surv(years, fstat == 1) ~ gender * age + bmi,
+  data = whas100_aft, dist = "exponential"
+)
+weibull_fit <- survreg(
+  Surv(years, fstat == 1) ~ gender * age + bmi,
+  data = whas100_aft, dist = "weibull"
+)
+knitr::kable(cbind(Exponential = coef(exponential_fit),
+                  Weibull = coef(weibull_fit)), digits = 6)
+c(`Weibull AFT scale` = weibull_fit$scale,
+  `Weibull shape` = 1 / weibull_fit$scale)
+```
+
+The regression coefficients use the accelerated failure-time parameterisation. Exponentiating an appropriate contrast gives a time ratio. In this parameterisation, the Weibull shape reported by Stata is `1 / weibull_fit$scale`, approximately 0.7982. This differs from the scale parameter returned by `survreg()` [@survival-survreg].
+
+```{r check-parametric, include=FALSE}
+check_reference("Table 8.2: exponential AFT model", coef(exponential_fit),
+                c(`(Intercept)` = 3.389083, gender = -3.932349,
+                  age = -0.0531945, bmi = 0.0934975, `gender:age` = 0.0497528),
+                tolerance = 5e-6)
+check_reference("Table 8.5: Weibull AFT model", coef(weibull_fit),
+                c(`(Intercept)` = 3.9721, gender = -4.68945,
+                  age = -0.0639403, bmi = 0.1055103, `gender:age` = 0.0591542),
+                tolerance = 5e-5)
+check_reference("Table 8.5: Weibull shape", 1 / weibull_fit$scale, 0.7981649)
+stopifnot(nrow(exponential_fit$y) == 100L, nrow(weibull_fit$y) == 100L,
+          sum(whas100_aft$fstat) == 51L)
+```
+
+# Comparison with published results
+
+The following selected results are calculated from the models above and compared with the values displayed by UCLA. The vignette also checks every coefficient in the cited fitted models, the event counts, and the numbers and total lengths of the time-dependent intervals. Numerical tolerances allow for rounding in the published output and small numerical differences between software implementations. The proportional-hazards diagnostic statistics are reported separately because the implementations differ.
+
+```{r numerical-comparison, echo=FALSE}
+comparison <- data.frame(
+  Table = c("2.17", "3.1", "4.11", "4.12", "5.3", "7.2", "7.6", "8.5"),
+  Quantity = c("BPD log-rank statistic", "ACTG treatment coefficient",
+               "GBCS hormone-by-size coefficient", "UIS drug-history coefficient",
+               "WHAS500 age coefficient", "UIS off-treatment coefficient",
+               "GRACE revascularisation coefficient", "Weibull shape"),
+  UCLA = c(5.62, -0.6843186, 0.0006522, 0.3210045, 0.0486034,
+           2.270329, -0.2609491, 0.7981649),
+  R = c(bpd_logrank$chisq, coef(actg_unadjusted)[["tx"]],
+        coef(gbcs_interaction)[["hormone01:size"]], coef(uis_drug)[["drug"]],
+        coef(whas500_cox)[["age"]], coef(uis_time_fit)[["off_tx"]],
+        coef(grace_time_fit)[["revasc_t"]], 1 / weibull_fit$scale)
+)
+knitr::kable(comparison, digits = 7, row.names = FALSE)
+```
+
+The calculations above passed `r length(checks)` numerical comparisons with published results. The versions used for this rendering are:
+
+```{r versions, echo=FALSE}
+cat(R.version.string, "\n")
+cat("asaData", as.character(packageVersion("asaData")), "\n")
+cat("survival", as.character(packageVersion("survival")), "\n")
+```
+
+# References

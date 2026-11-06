@@ -24,9 +24,27 @@
 #' \href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page}: SAS and SPSS downloads and analysis examples for Stata, SPSS, and SAS.
 #' @references
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
+#' @references
+#' UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-7-extensions-of-the-proportional-hazards-model/}{Applied Survival Analysis, second edition: Chapter 7, Stata examples}. Table 7.6.
+#' @seealso \code{vignette("survival-examples", package = "asaData")} for longer analyses.
 #' @examples
 #' data(grace1000, package = "asaData")
-#' str(grace1000)
-#' head(grace1000)
+#' if (requireNamespace("survival", quietly = TRUE)) {
+#'   # Second edition, Table 7.6: revascularisation changes during follow-up.
+#'   grace_intervals <- survival::tmerge(
+#'     grace1000, grace1000, id = id, death_event = event(days, death)
+#'   )
+#'   grace_intervals <- survival::tmerge(
+#'     grace_intervals, grace1000[grace1000$revasc == 1, ],
+#'     id = id, revasc_t = tdc(revascdays)
+#'   )
+#'   grace_cox <- survival::coxph(
+#'     survival::Surv(tstart, tstop, death_event) ~ revasc_t +
+#'       I(1000 / age) + sqrt(sysbp) + stchange,
+#'     data = grace_intervals, ties = "breslow"
+#'   )
+#'   c(intervals = nrow(grace_intervals), deaths = grace_cox$nevent)
+#'   summary(grace_cox)
+#' }
 #' @keywords datasets
 "grace1000"

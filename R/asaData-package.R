@@ -16,6 +16,8 @@
 #' This package is distributed under the \href{https://www.r-project.org/Licenses/GPL-3}{GNU General Public License, version 3 (GPL-3)}. Third-party datasets and codebooks retain their existing rights.
 #' @author Graeme L. Hickey
 #' @seealso \code{\link{hmohiv}}, \code{\link{whas500}}, \code{\link{gbcs}}
+#'
+#' \code{vignette("survival-examples", package = "asaData")} for analyses using the optional \pkg{survival} package.
 #' @examples
 #' data(package = "asaData")
 #' data("whas500", package = "asaData")

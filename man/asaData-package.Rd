@@ -36,6 +36,8 @@ system.file("extdata", "edition2", "whas500.dat", package = "asaData")
 }
 \seealso{
 \code{\link{hmohiv}}, \code{\link{whas500}}, \code{\link{gbcs}}
+
+\code{vignette("survival-examples", package = "asaData")} for analyses using the optional \pkg{survival} package.
 }
 \author{
 Graeme L. Hickey

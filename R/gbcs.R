@@ -29,9 +29,20 @@
 #' \href{https://stats.oarc.ucla.edu/other/examples/asa2/}{UCLA companion page}: SAS and SPSS downloads and analysis examples for Stata, SPSS, and SAS.
 #' @references
 #' Hosmer, D. W., Jr., Lemeshow, S., and May, S. (2008). \emph{Applied Survival Analysis: Regression Modeling of Time to Event Data}. Second edition. Wiley. \doi{10.1002/9780470258019}.
+#' @references
+#' UCLA Office of Advanced Research Computing. \href{https://stats.oarc.ucla.edu/stata/examples/asa2/applied-survival-analysis-by-hosmer-lemeshow-and-maychapter-4-interpretation-of-a-fitted-proportional-hazards-regression-model/}{Applied Survival Analysis, second edition: Chapter 4, Stata examples}. Table 4.11.
+#' @seealso \code{vignette("survival-examples", package = "asaData")} for longer analyses.
 #' @examples
 #' data(gbcs, package = "asaData")
-#' with(gbcs, table(menopause, hormone))
-#' with(gbcs, all(as.numeric(recdate - diagdate) == rectime))
+#' if (requireNamespace("survival", quietly = TRUE)) {
+#'   # Second edition, Table 4.11: recurrence and hormone-by-size interaction.
+#'   # Use a local 0/1 indicator: the packaged hormone variable is coded 1/2.
+#'   gbcs_analysis <- transform(gbcs, hormone01 = as.integer(hormone == 2))
+#'   gbcs_cox <- survival::coxph(
+#'     survival::Surv(rectime, censrec == 1) ~ hormone01 * size,
+#'     data = gbcs_analysis, ties = "breslow"
+#'   )
+#'   coef(gbcs_cox)
+#' }
 #' @keywords datasets
 "gbcs"
